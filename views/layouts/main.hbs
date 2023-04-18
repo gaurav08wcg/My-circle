@@ -1,21 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{title}}</title>
-    {{!-- custom style --}}
-    <link rel='stylesheet' href='/stylesheets/main.css' />
-    
-    {{!-- theme links --}}
-    {{>main/theme-link}}
 
-  </head>
-  <body>
-    {{!-- navbar --}}
-    {{>header}}
+<head>
+  <title>{{title}}</title>
+  {{!-- custom style --}}
+  <link rel='stylesheet' href='/stylesheets/main.css' />
 
-    {{{body}}}
+  {{!-- theme links --}}
+  {{>main/theme-link}}
 
-    {{!-- theme scripts --}}
-    {{>main/theme-script}}
-  </body>
+  {{!-- AJAX --}}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  {{!-- Jquery validation CDN --}}
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+</head>
+
+<body>
+  {{!-- navbar --}}
+  {{>header}}
+
+  {{{body}}}
+
+  {{!-- theme scripts --}}
+  {{>main/theme-script}}
+
+  {{!-- custom JS (Jquery) --}}
+  {{{_sections.script}}}
+</body>
+
 </html>

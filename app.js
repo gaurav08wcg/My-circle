@@ -9,7 +9,11 @@ const passport = require("passport");
 const { setLocals, checkAuth } = require("./common/functions");
 
 var indexRouter = require("./routes/index");
+var profileRouter = require("./routes/profile");
+var postRouter = require("./routes/post");
+var savedPostRouter = require("./routes/saved-post");
 var usersRouter = require("./routes/users");
+var reportRouter = require("./routes/report");
 
 var app = express();
 
@@ -28,6 +32,16 @@ const hbs = exphbs.create({
       this._sections[name] = options.fn(this);
       return null;
     },
+    //compare two value
+    compare: function (lvalue, rvalue, options) {
+      if (arguments.length < 3)
+        throw new Error("Handlebars Helper equal needs 2 parameters");
+      if (lvalue != rvalue) {
+        return options.inverse(this);
+      } else {
+        return options.fn(this);
+      }
+    }
   },
 });
 
@@ -38,17 +52,17 @@ app.set("view engine", "hbs");
 
 /* ========= Cookie Session ========== */
 app.use(cookieSession({
-  secret:"session",
-  key:"werfasklcasghflkwefu"
+  secret: "session",
+  key: "werfasklcasghflkwefu"
 }));
 
 /* ========= Session ========== */
 app.use(session({
-  secret:"werfasklcasghflkwefu",
+  secret: "werfasklcasghflkwefu",
   saveUninitialized: true,
-    resave: true,
-    maxAge: Date.now() + 30 * 86400 * 1000,
-    cookie: { secure: true },
+  resave: true,
+  maxAge: Date.now() + 30 * 86400 * 1000,
+  cookie: { secure: true },
 }))
 
 /* ======== passport initialization ========= */
@@ -73,7 +87,11 @@ app.use("/", indexRouter);
 // set authentication middleware
 app.use(checkAuth)
 
+app.use("/profile", profileRouter);
+app.use("/post", postRouter);
+app.use("/saved-post", savedPostRouter);
 app.use("/users", usersRouter);
+app.use("/report", reportRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -86,7 +104,7 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  
+
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
