@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    {{!-- custom style --}}
+    <link rel='stylesheet' href='/stylesheets/main.css' />
+    
+    {{!-- theme links --}}
+    {{>main/theme-link}}
+
+  </head>
+  <body>
+    {{!-- navbar --}}
+    {{>header}}
+
+    {{{body}}}
+
+    {{!-- theme scripts --}}
+    {{>main/theme-script}}
+  </body>
+</html>
