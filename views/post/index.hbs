@@ -5,7 +5,7 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <h2 class="page-title">
-                        create post
+                        Create new post
                     </h2>
                 </div>
             </div>
@@ -15,5 +15,55 @@
     <div class="page-body">
         <div class="container-xl">
             <!-- Content here -->
+
+
+                <form id="create-post-form" method="POST" action="/post/add"  class="card" enctype="multipart/form-data">
+                  <div class="card-header">
+                    <h4 class="card-title">Post Details</h4>
+                  </div>
+                  <div class="card-body">
+
+                    {{!-- ========= post Title ======== --}}
+                    <div class="mb-3">
+                        <label class="form-label">Post Title  </label>
+                        <input type="text" class="form-control" name="title" placeholder="Enter post title">
+                    </div>
+
+                    {{!-- ========= Post Description ========= --}}
+                    <div class="mb-3">
+                        <label class="form-label">Post Description<span class="form-label-description"></span></label>
+                        <textarea class="form-control" name="description" rows="6"
+                            placeholder="Write Description about post..."></textarea>
+                    </div>
+
+                    {{!-- ========= Post Image ========= --}}
+                    <div class="mb-3">
+                        <div class="form-label">Upload Post Image</div>
+                        <input type="file" class="form-control" name="postImage">
+                    </div>
+                </div>
+
+                {{!-- =========== Buttons ========== --}}
+                <div class="card-footer text-end">
+                  <div class="d-flex">
+                    {{!-- <a href="#" class="btn btn-link">Cancel</a> --}}
+                    <button type="submit" id="create-post-btn" class="btn btn-primary ms-auto">Create Post</button>
+                  </div>
+                </div>
+              </form>
+            
         </div>
     </div>
+
+
+    {{!-- Event File --}}
+{{#section "script"}}
+<script src="./javascripts/create-post.js"></script>
+<script>
+    $(document).ready(function(){
+
+        new createPostEvent();
+
+    })
+</script>
+{{/section}}

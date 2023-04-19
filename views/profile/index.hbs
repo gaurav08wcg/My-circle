@@ -6,6 +6,10 @@
                 <div class="col">
                     <h2 class="page-title">
                         User profile
+                        
+                        {{!-- flash message :- update successfully --}}
+                        {{messages}}
+                        
                     </h2>
                 </div>
             </div>
@@ -20,8 +24,13 @@
 
                     {{!-- ========= user photo ========= --}}
                     <div class="col-auto">
-                        <span class="avatar avatar-lg rounded"
-                            style="background-image: url(./static/avatars/003m.jpg)"></span>
+                        {{#if user.profilePicture}}
+                        <img class="avatar avatar-lg rounded" src="/uploads/profilePicture/{{user.profilePicture.name}}" alt="profile-pic">
+                        {{else}}
+                        <img class="avatar avatar-lg rounded" src="/images/avatar.png" alt="profile-pic">
+                        {{/if}}
+                        {{!-- <span class="avatar avatar-lg rounded"
+                            style="background-image: url(./uploads/profilePicture/{{user.profilePicture.name}})"></span> --}}
                     </div>
                     <div class="col">
 
@@ -34,7 +43,7 @@
                                 {{!-- ========= user gender ======= --}}
 
                                 {{!-- if user gender is male --}}
-                                {{!-- {{#compare user.gender "male"}}
+                                {{#compare user.gender "==" "male"}}
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-man"
                                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -46,10 +55,10 @@
                                     <path d="M19 11c-1.333 -1.333 -2.667 -2 -4 -2"></path>
                                     <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
                                 </svg>
-                                {{/compare}} --}}
+                                {{/compare}}
 
                                 {{!-- if user gender is female --}}
-                                {{!-- {{#compare user.gender "female"}}
+                                {{#compare user.gender "==" "female"}}
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-woman"
                                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -61,9 +70,9 @@
                                     <path d="M19 11c-1.667 -1.333 -3.333 -2 -5 -2"></path>
                                     <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
                                 </svg>
-                                {{/compare}} --}}
+                                {{/compare}}
 
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-man"
+                                {{!-- <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-man"
                                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -73,7 +82,7 @@
                                     <path d="M5 11c1.333 -1.333 2.667 -2 4 -2"></path>
                                     <path d="M19 11c-1.333 -1.333 -2.667 -2 -4 -2"></path>
                                     <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                </svg>
+                                </svg> --}}
 
                                 {{user.gender}}
                             </div>
@@ -122,160 +131,92 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
 
-                                    {{!-- user first name --}}
-                                    <div class="mb-3">
-                                        <label class="form-label">First Name</label>
-                                        <input type="text" class="form-control" name="firstName"
-                                            placeholder="Enter new first name">
-                                    </div>
+                                {{!-- edit profile form --}}
+                                <form id="edit-profile-form" method="POST" action="/profile" enctype="multipart/form-data">
+                                    <div class="modal-body">
 
-                                    {{!-- user Last name --}}
-                                    <div class="mb-3">
-                                        <label class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" name="example-text-input"
-                                            placeholder="Enter new last name">
-                                    </div>
-
-                                    {{!-- user Gender --}}
-                                    <div class="mb-3">
-                                        <label class="form-label">Gender*</label>
-                                        <input name="gender" value="male" id="gender" type="radio"> Male
-                                        <input name="gender" value="female" id="gender" type="radio"> Female
-                                    </div>
-
-                                    {{!-- user Email --}}
-                                    <div class="mb-3">
-                                        <label class="form-label">Email address*</label>
-                                        <input name="email" id="email" type="email" class="form-control"
-                                            placeholder="Enter new email">
-                                    </div>
-
-                                    {{!-- upload user profile --}}
-                                    <div class="mb-3">
-                                        <div class="form-label">Upload Profile pic</div>
-                                        <input type="file" class="form-control" enctype="multipart/form-data"
-                                            name="profilePic">
-                                    </div>
-
-                                    {{!-- <label class="form-label">Report type</label>
-                                    <div class="form-selectgroup-boxes row mb-3">
-                                        <div class="col-lg-6">
-                                            <label class="form-selectgroup-item">
-                                                <input type="radio" name="report-type" value="1"
-                                                    class="form-selectgroup-input" checked>
-                                                <span class="form-selectgroup-label d-flex align-items-center p-3">
-                                                    <span class="me-3">
-                                                        <span class="form-selectgroup-check"></span>
-                                                    </span>
-                                                    <span class="form-selectgroup-label-content">
-                                                        <span class="form-selectgroup-title strong mb-1">Simple</span>
-                                                        <span class="d-block text-muted">Provide only basic data needed
-                                                            for the report</span>
-                                                    </span>
-                                                </span>
-                                            </label>
+                                        {{!-- user first name --}}
+                                        <div class="mb-3">
+                                            <label class="form-label">First Name</label>
+                                            <input type="text" class="form-control" name="firstName"
+                                                placeholder="Enter new first name" value={{user.firstName}}>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <label class="form-selectgroup-item">
-                                                <input type="radio" name="report-type" value="1"
-                                                    class="form-selectgroup-input">
-                                                <span class="form-selectgroup-label d-flex align-items-center p-3">
-                                                    <span class="me-3">
-                                                        <span class="form-selectgroup-check"></span>
-                                                    </span>
-                                                    <span class="form-selectgroup-label-content">
-                                                        <span class="form-selectgroup-title strong mb-1">Advanced</span>
-                                                        <span class="d-block text-muted">Insert charts and additional
-                                                            advanced analyses to be inserted in the report</span>
-                                                    </span>
-                                                </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-8">
-                                            <div class="mb-3">
-                                                <label class="form-label">Report url</label>
-                                                <div class="input-group input-group-flat">
-                                                    <span class="input-group-text">
-                                                        https://tabler.io/reports/
-                                                    </span>
-                                                    <input type="text" class="form-control ps-0" value="report-01"
-                                                        autocomplete="off">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="mb-3">
-                                                <label class="form-label">Visibility</label>
-                                                <select class="form-select">
-                                                    <option value="1" selected>Private</option>
-                                                    <option value="2">Public</option>
-                                                    <option value="3">Hidden</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Client name</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Reporting period</label>
-                                                <input type="date" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div>
-                                                <label class="form-label">Additional information</label>
-                                                <textarea class="form-control" rows="3"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
-                                <div class="modal-footer">
 
-                                    {{!-- ======== model cancle Btn ======== --}}
-                                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                                        Cancel
-                                    </a>
+                                        {{!-- user Last name --}}
+                                        <div class="mb-3">
+                                            <label class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" name="lastName"
+                                                placeholder="Enter new last name" value={{user.lastName}}>
+                                        </div>
 
-                                    {{!-- ======== modal Edit btn ========= --}}
-                                    <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-pencil-plus" width="24" height="24"
-                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M8 20l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4h4z"></path>
-                                            <path d="M13.5 6.5l4 4"></path>
-                                            <path d="M16 18h4m-2 -2v4"></path>
-                                        </svg>
-                                        Edit
-                                    </a>
-                                </div>
+                                        {{!-- user Gender --}}
+                                        <div class="mb-3">
+                                            <label class="form-label">Gender*</label>
+                                            {{#compare user.gender "==" "male"}}
+                                            <input name="gender" value="male" id="gender" type="radio" checked> Male
+                                            <input name="gender" value="female" id="gender" type="radio" > Female                                            
+                                            {{/compare}}
+
+                                            {{#compare user.gender "==" "female"}}
+                                            <input name="gender" value="male" id="gender" type="radio" > Male
+                                            <input name="gender" value="female" id="gender" type="radio" checked> Female
+                                            {{/compare}}
+                                        </div>
+
+                                        {{!-- user Email --}}
+                                        <div class="mb-3">
+                                            <label class="form-label">Email address*</label>
+                                            <input name="email" id="email" type="email" class="form-control"
+                                                placeholder="Enter new email" value={{user.email}}>
+                                        </div>
+
+                                        {{!-- upload user profile --}}
+                                        <div class="mb-3">
+                                            <div class="form-label">Upload Profile pic</div>
+                                            <input type="file" class="form-control" enctype="multipart/form-data"
+                                                name="profilePicture">
+                                        </div>
+
+                                    </div>
+                                        <div class="modal-footer">
+
+                                            {{!-- ======== model cancle Btn ======== --}}
+                                            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                                                Cancel
+                                            </a>
+
+                                            {{!-- ======== modal Edit btn ========= --}}
+                                            <button id="edit-btn" type="submit" class="btn btn-primary ms-auto"
+                                                >
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="icon icon-tabler icon-tabler-pencil-plus" width="24"
+                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                    stroke="currentColor" fill="none" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M8 20l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4h4z">
+                                                    </path>
+                                                    <path d="M13.5 6.5l4 4"></path>
+                                                    <path d="M16 18h4m-2 -2v4"></path>
+                                                </svg>
+                                                Edit
+                                            </button>
+                                        </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    {{!-- Js Events file--}}
-    {{#section 'script'}}
-    <script src="./javascripts/profile.js"></script>
-    <script>
-        $(document).ready(function () {
-            new profileEvent();
-        })
-    </script>
-    {{/section}}
+        {{!-- Js Events file--}}
+        {{#section 'script'}}
+        <script src="./javascripts/profile.js"></script>
+        <script>
+            $(document).ready(function () {
+                new profileEvent();
+            })
+        </script>
+        {{/section}}

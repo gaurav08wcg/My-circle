@@ -30,7 +30,7 @@
           </li>
 
           {{!-- Profile --}}
-          <li class="nav-item ">
+          {{!-- <li class="nav-item ">
             <a class="nav-link " href="/profile" data-bs-auto-close="outside" role="button" aria-expanded="false">
               <span
                 class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -47,7 +47,7 @@
                 Profile
               </span>
             </a>
-          </li>
+          </li> --}}
 
           {{!-- Create Post --}}
           <li class="nav-item ">
@@ -205,15 +205,21 @@
       {{!-- user icon --}}
       <div class="nav-item dropdown">
         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-          <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
+
+          {{#if user.profilePicture}}
+          <span class="avatar avatar-sm" style="background-image: url(./uploads/profilePicture/{{user.profilePicture.name}})"></span>
+          {{else}}
+          <span class="avatar avatar-sm" style="background-image: url(./images/avatar.png)"></span>
+          {{/if}}
           <div class="d-none d-xl-block ps-2">
             <div id="user-name">{{user.firstName}}</div>
             <div id="user-email" class="mt-1 small text-muted">{{user.email}}</div>
           </div>
         </a>
+          {{!-- Log out btn --}}
         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+          <a href="/profile" id="profile-btn" class="dropdown-item">Profile</a>
           <a href="/logout" id="logout-btn" class="dropdown-item">Logout</a>
-
         </div>
       </div>
 

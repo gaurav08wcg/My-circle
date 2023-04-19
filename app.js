@@ -6,7 +6,9 @@ var logger = require("morgan");
 const session = require("express-session");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
-const { setLocals, checkAuth } = require("./common/functions");
+var handlebarHelpers = require('handlebars-helpers')();  // handlebar helpers
+var flash = require('connect-flash');
+const commonFun = require("./common/functions");
 
 var indexRouter = require("./routes/index");
 var profileRouter = require("./routes/profile");
@@ -19,30 +21,23 @@ var app = express();
 
 /* ========= Handlebar setup ============ */
 const exphbs = require("express-handlebars");
+const customHelper = {
+  section: function (name, options) {
+        if (!this._sections) this._sections = {};
+        this._sections[name] = options.fn(this);
+        return null;
+      },
+}
 const hbs = exphbs.create({
   extname: ".hbs",
   defaultLayout: "main",
   layoutsDir: path.join(__dirname, "views/layouts"),
   partialsDir: path.join(__dirname, "views/partials"),
-  // listing helpers
-  helpers: {
-    // for section
-    section: function (name, options) {
-      if (!this._sections) this._sections = {};
-      this._sections[name] = options.fn(this);
-      return null;
-    },
-    //compare two value
-    compare: function (lvalue, rvalue, options) {
-      if (arguments.length < 3)
-        throw new Error("Handlebars Helper equal needs 2 parameters");
-      if (lvalue != rvalue) {
-        return options.inverse(this);
-      } else {
-        return options.fn(this);
-      }
-    }
-  },
+  // register helpers
+  helpers:{
+    ...handlebarHelpers,
+    ...customHelper
+  }
 });
 
 // view engine setup
@@ -68,9 +63,9 @@ app.use(session({
 /* ======== passport initialization ========= */
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(flash());
 app.use(logger("dev"));
-app.use(express.json());
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
@@ -79,13 +74,13 @@ app.use(express.static(path.join(__dirname, "public")));
 require("./db_connection")(process.env.DB_URL);
 
 // set user in locals
-app.use(setLocals);
+app.use(commonFun.setLocals);
 
 // main route 
 app.use("/", indexRouter);
 
 // set authentication middleware
-app.use(checkAuth)
+app.use(commonFun.checkAuth)
 
 app.use("/profile", profileRouter);
 app.use("/post", postRouter);

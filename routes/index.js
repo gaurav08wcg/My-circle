@@ -22,12 +22,6 @@ passport.use( new LocalStrategy(
         },
         password: md5(password),
       },
-      {
-        firstName: 1,
-        lastName: 1,
-        gender: 1,
-        email: 1,
-      }
     )
     .then( ( user ) => {
       console.log("-------- inside .then() ---------")

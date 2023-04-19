@@ -32,6 +32,20 @@ const usersSchema = new mongoose.Schema(
     password:{
       type:String,
       require: true
+    },
+    profilePicture:{
+      name:{
+        type: String
+      },
+      originalName:{
+        type: String
+      },
+      fileType:{
+        type:String
+      },
+      path:{
+        type:String
+      },
     }
   },
   options
