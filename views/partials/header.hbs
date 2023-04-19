@@ -49,8 +49,37 @@
             </a>
           </li> --}}
 
-          {{!-- Create Post --}}
-          <li class="nav-item ">
+          {{!-- ======== post ======= --}}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
+              data-bs-auto-close="outside" role="button" aria-expanded="false">
+              <span
+                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/lifebuoy -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-plus"
+                  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M9 12h6"></path>
+                  <path d="M12 9v6"></path>
+                  <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"></path>
+                </svg>
+              </span>
+              <span class="nav-link-title">
+                Post
+              </span>
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/post">
+                Create Post
+              </a>
+              <a class="dropdown-item" href="/saved-post">
+                Saved Post
+              </a>
+            </div>
+          </li>
+
+          {{!-- Create Post (not used) --}}
+          {{!-- <li class="nav-item ">
             <a class="nav-link" href="/post" data-bs-auto-close="outside" role="button" aria-expanded="false">
               <span
                 class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/lifebuoy -->
@@ -67,10 +96,10 @@
                 Create Post
               </span>
             </a>
-          </li>
+          </li> --}}
 
-          {{!-- Saved Posts --}}
-          <li class="nav-item ">
+          {{!-- Saved Posts (not used) --}}
+          {{!-- <li class="nav-item ">
             <a class="nav-link " href="/saved-post" data-bs-auto-close="outside" role="button" aria-expanded="false">
               <span
                 class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/star -->
@@ -87,7 +116,7 @@
                 Saved Posts
               </span>
             </a>
-          </li>
+          </li> --}}
 
           {{!-- Users --}}
           <li class="nav-item ">
@@ -207,7 +236,8 @@
         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
 
           {{#if user.profilePicture}}
-          <span class="avatar avatar-sm" style="background-image: url(./uploads/profilePicture/{{user.profilePicture.name}})"></span>
+          <span class="avatar avatar-sm"
+            style="background-image: url(./uploads/profilePicture/{{user.profilePicture.name}})"></span>
           {{else}}
           <span class="avatar avatar-sm" style="background-image: url(./images/avatar.png)"></span>
           {{/if}}
@@ -216,7 +246,7 @@
             <div id="user-email" class="mt-1 small text-muted">{{user.email}}</div>
           </div>
         </a>
-          {{!-- Log out btn --}}
+        {{!-- Log out btn --}}
         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
           <a href="/profile" id="profile-btn" class="dropdown-item">Profile</a>
           <a href="/logout" id="logout-btn" class="dropdown-item">Logout</a>

@@ -1,55 +1,135 @@
 <div class="page-wrapper">
-<!-- Page header -->
-<div class="page-header d-print-none">
-    <div class="container-xl">
-    <div class="row g-2 align-items-center">
-        <div class="col">
-        <h2 class="page-title">
-            all Post
-        </h2>
+    <!-- Page header -->
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <h2 class="page-title">
+                        All Post
+                    </h2>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-</div>
-<!-- Page body -->
-<div class="page-body">
-    <div class="container-xl">
-    <!-- Content here -->
-    </div>
-</div>
+    <!-- Page body -->
+    <div class="page-body">
+        <div class="container-xl">
+            {{#if posts}}
+            {{#each posts}}
+            {{!-- ======= all post grid ======= --}}
+            <div class="row row-cards">
+                {{!-- ======= single post card ======= --}}
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card card-sm">
 
-{{!-- <footer class="footer footer-transparent d-print-none">
-    <div class="container-xl">
-    <div class="row text-center align-items-center flex-row-reverse">
-        <div class="col-lg-auto ms-lg-auto">
-        <ul class="list-inline list-inline-dots mb-0">
-            <li class="list-inline-item"><a href="./docs/" class="link-secondary">Documentation</a></li>
-            <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a></li>
-            <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary" rel="noopener">Source code</a></li>
-            <li class="list-inline-item">
-            <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
-                <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
-                Sponsor
-            </a>
-            </li>
-        </ul>
-        </div>
-        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-        <ul class="list-inline list-inline-dots mb-0">
-            <li class="list-inline-item">
-            Copyright &copy; 2023
-            <a href="." class="link-secondary">Tabler</a>.
-            All rights reserved.
-            </li>
-            <li class="list-inline-item">
-            <a href="./changelog.html" class="link-secondary" rel="noopener">
-                v1.0.0-beta17
-            </a>
-            </li>
-        </ul>
+                        {{!-- post title --}}
+                        <div class="card-header">
+                            <h3 class="card-title"> <b>Title</b> - {{title}}</h3>
+                        </div>
+
+                        {{!-- post image --}}
+                        <a href="#" class="d-block">
+                            <img src="/uploads/posts/{{postImage.name}}" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+
+                            {{!-- post description --}}
+                            <div class="description">
+                                <span class="h3"> description </span> - {{description}}
+                            </div>
+                            <div class="d-flex align-items-center">
+
+                                {{!-- post's user profile --}}
+                                <span class="avatar me-3 rounded"
+                                    style="background-image: url(./static/avatars/000m.jpg)"></span>
+
+                                {{!-- user's name --}}
+                                <div>
+                                    <div>{{post_with_users.firstName}} {{post_with_users.lastName}}</div>
+                                    {{!-- <div class="text-muted">3 days ago</div> --}}
+                                </div>
+
+                                <div class="ms-auto">
+
+
+                                    {{!-- edit post icon --}}
+                                    {{#compare postBy "==" user._id}}
+                                    <a href="#" class="text-muted" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        aria-label="edit post" data-bs-original-title="edit post">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-photo-edit" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M15 8h.01"></path>
+                                            <path d="M11 20h-4a3 3 0 0 1 -3 -3v-10a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v4">
+                                            </path>
+                                            <path d="M4 15l4 -4c.928 -.893 2.072 -.893 3 0l3 3"></path>
+                                            <path d="M14 14l1 -1c.31 -.298 .644 -.497 .987 -.596"></path>
+                                            <path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z">
+                                            </path>
+                                        </svg>
+                                    </a>
+                                    {{/compare}}
+                                    {{!-- post save icon --}}
+                                    <a href="#" class="ms-3 text-muted" data-bs-toggle="tooltip"
+                                        data-bs-original-title="Save post">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-bookmark" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"></path>
+                                        </svg>
+                                    </a>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+            {{!-- ======= Pagination ======== --}}
+            {{!-- <div class="d-flex">
+                <ul class="pagination ms-auto">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M15 6l-6 6l6 6" />
+                            </svg>
+                            prev
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M9 6l6 6l-6 6" />
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div> --}}
+
+            {{else}}
+            <h3>No post</h3>
+            {{/if}}
         </div>
     </div>
-    </div>
-</footer> --}}
 </div>
