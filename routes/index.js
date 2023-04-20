@@ -168,7 +168,7 @@ router.get("/logout/", async (req, res, next) => {
   try {
     console.log("logout");
     await req.logout();
-    return res.redirect('/signin');
+    return res.redirect('/');
   } catch (error) {
     console.log("error =>", error);
     res.redirect("/signin");

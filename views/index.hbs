@@ -16,8 +16,8 @@
         <div class="container-xl">
             {{!-- ======= all post grid ======= --}}
             <div class="row row-cards">
-            {{#if posts}}
-            {{#each posts}}
+                {{#if posts}}
+                {{#each posts}}
                 {{!-- ======= single post card ======= --}}
                 <div class="col-sm-6 col-lg-4">
                     <div class="card card-sm">
@@ -53,9 +53,11 @@
 
 
                                     {{!-- edit post icon --}}
-                                    {{!-- only edit user's own post  --}}
+                                    {{!-- only edit user's own post --}}
                                     {{#compare postBy "==" ../user._id}}
-                                    <a href="#" id="edit-post-btn" data-post-id="{{_id}}"  class="text-muted" data-bs-toggle="modal" data-bs-target="#modal-report"  aria-label="edit post" data-bs-original-title="edit post" data-bs-target="#modal-report">
+                                    <a href="#" id="edit-post-btn" data-post-id="{{_id}}" class="text-muted"
+                                        data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="edit post"
+                                        data-bs-original-title="edit post" data-bs-target="#modal-report">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             class="icon icon-tabler icon-tabler-photo-edit" width="24" height="24"
@@ -75,8 +77,9 @@
                                     {{/compare}}
 
                                     {{!-- post save icon --}}
-                                    <a id="saved-post-btn" href="#" data-post-id="{{_id}}" class="ms-3 text-muted" data-bs-toggle="tooltip"
-                                        data-bs-original-title="Save post">
+                                    {{#if ../user}}
+                                    <a id="saved-post-btn" href="#" data-post-id="{{_id}}" class="ms-3 text-muted"
+                                        data-bs-toggle="tooltip" data-bs-original-title="Save post">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             class="icon icon-tabler icon-tabler-bookmark" width="24" height="24"
@@ -85,16 +88,16 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"></path>
                                         </svg>
-                                        Save
                                     </a>
+                                    {{/if}}
 
                                 </div>
 
                             </div>
                         </div>
+                    </div>
                 </div>
-                </div>
-            {{/each}}
+                {{/each}}
             </div>
 
             {{!-- ========= Edit Post Modal ========== --}}
@@ -104,8 +107,7 @@
                         {{!-- Modle title --}}
                         <div class="modal-header">
                             <h5 class="modal-title">Edit Post</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         {{!-- form --}}
@@ -159,11 +161,10 @@
 {{#section "script"}}
 <script src="./javascripts/index.js"></script>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
 
         new listAllPostEvent();
-        
+
     })
 </script>
 {{/section}}
-
