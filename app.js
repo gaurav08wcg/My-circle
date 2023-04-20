@@ -27,6 +27,9 @@ const customHelper = {
         this._sections[name] = options.fn(this);
         return null;
       },
+  log: function(data){
+    console.log(`handlebar logs  => `, data);
+  }
 }
 const hbs = exphbs.create({
   extname: ".hbs",

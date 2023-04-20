@@ -236,8 +236,9 @@
         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
 
           {{#if user.profilePicture}}
-          <span class="avatar avatar-sm"
-            style="background-image: url(./uploads/profilePicture/{{user.profilePicture.name}})"></span>
+          <span class="avatar avatar-sm">
+            <img src="./uploads/profilePicture/{{user.profilePicture.name}}" alt="user-avatar">
+          </span>
           {{else}}
           <span class="avatar avatar-sm" style="background-image: url(./images/avatar.png)"></span>
           {{/if}}

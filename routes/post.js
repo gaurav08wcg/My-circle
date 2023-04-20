@@ -6,6 +6,7 @@ const { postModel } = require("../model/post");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
+const { log } = require('console');
 
 // create storage
 const storage = multer.diskStorage({
@@ -61,5 +62,46 @@ router.post("/add",upload.single("postImage"), async (req,res,post)=>{
         res.render("error", { message: error })
     }
 })
+
+/* edit */
+router.get("/edit/:id", async (req,res,next) =>{
+  try {
+    // console.log("edit =>", req.params);
+
+    const postOldDetails =  await postModel.findOne({ _id: req.params?.id }).lean();
+  
+    res.render("partials/edit-post-modal", { postOldDetails : postOldDetails, layout:"blank" })
+  } catch (error) {
+    res.render("error", { message: error })
+  }
+});
+
+
+router.post("/edit/:id", upload.single("postImage"),async (req,res,next) => {
+    try {
+      console.log("req.body =>", req.body);
+      console.log("req.file =>", req.file);
+      console.log()
+      const bodyData = req.body;
+
+      // if update image
+      if(req.file){
+        const fileNewName = req.file.path.split("/");
+        bodyData["postImage"] ={
+          name:fileNewName[fileNewName.length - 1],
+          path: req.file.path
+        }
+      }
+
+      // update post
+      await postModel.updateOne({_id:req.params.id}, { $set: bodyData });
+      
+      res.redirect("/");
+
+    } catch (error) {
+      res.render("error", { message: error })
+    }  
+})
+
 
 module.exports = router;

@@ -73,8 +73,7 @@ passport.deserializeUser(function (user, done) {
 /* GET home page ( Landing page ). */
 router.get('/', async function (req, res, next) {
   try {
-
-    const pipline = [];
+    const pipeline = [];
     const lookup = {
       $lookup: {
         from: "users",
@@ -86,11 +85,11 @@ router.get('/', async function (req, res, next) {
     const unwind = {
       $unwind: "$post_with_users"
     }
-    pipline.push(lookup);
-    pipline.push(unwind);
+    pipeline.push(lookup);
+    pipeline.push(unwind);
 
-    const allPost = await postModel.aggregate(pipline);
-    // console.log("pipline =>", pipline);
+    const allPost = await postModel.aggregate(pipeline);
+    // console.log("pipeline =>", pipeline);
     console.log("allPost =>", allPost);
 
     res.render('index', { title: 'Home', posts: allPost });

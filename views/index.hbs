@@ -14,17 +14,17 @@
     <!-- Page body -->
     <div class="page-body">
         <div class="container-xl">
-            {{#if posts}}
-            {{#each posts}}
             {{!-- ======= all post grid ======= --}}
             <div class="row row-cards">
+            {{#if posts}}
+            {{#each posts}}
                 {{!-- ======= single post card ======= --}}
                 <div class="col-sm-6 col-lg-4">
                     <div class="card card-sm">
 
                         {{!-- post title --}}
                         <div class="card-header">
-                            <h3 class="card-title"> <b>Title</b> - {{title}}</h3>
+                            <h3 class="card-title"> <b>{{title}}</b></h3>
                         </div>
 
                         {{!-- post image --}}
@@ -34,18 +34,18 @@
                         <div class="card-body">
 
                             {{!-- post description --}}
-                            <div class="description">
-                                <span class="h3"> description </span> - {{description}}
+                            <div class="description pb-4 ">
+                                {{description}}
                             </div>
                             <div class="d-flex align-items-center">
 
                                 {{!-- post's user profile --}}
-                                <span class="avatar me-3 rounded"
-                                    style="background-image: url(./static/avatars/000m.jpg)"></span>
+                                {{!-- <span class="avatar me-3 rounded"
+                                    style="background-image: url(./static/avatars/000m.jpg)"></span> --}}
 
                                 {{!-- user's name --}}
                                 <div>
-                                    <div>{{post_with_users.firstName}} {{post_with_users.lastName}}</div>
+                                    <div><b>{{post_with_users.firstName}} {{post_with_users.lastName}}</b> </div>
                                     {{!-- <div class="text-muted">3 days ago</div> --}}
                                 </div>
 
@@ -53,9 +53,9 @@
 
 
                                     {{!-- edit post icon --}}
-                                    {{#compare postBy "==" user._id}}
-                                    <a href="#" class="text-muted" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        aria-label="edit post" data-bs-original-title="edit post">
+                                    {{!-- only edit user's own post  --}}
+                                    {{#compare postBy "==" ../user._id}}
+                                    <a href="#" id="edit-post-btn" data-post-id="{{_id}}"  class="text-muted" data-bs-toggle="modal" data-bs-target="#modal-report"  aria-label="edit post" data-bs-original-title="edit post" data-bs-target="#modal-report">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             class="icon icon-tabler icon-tabler-photo-edit" width="24" height="24"
@@ -70,10 +70,12 @@
                                             <path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z">
                                             </path>
                                         </svg>
+                                        Edit
                                     </a>
                                     {{/compare}}
+
                                     {{!-- post save icon --}}
-                                    <a href="#" class="ms-3 text-muted" data-bs-toggle="tooltip"
+                                    <a id="saved-post-btn" href="#" data-post-id="{{_id}}" class="ms-3 text-muted" data-bs-toggle="tooltip"
                                         data-bs-original-title="Save post">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -83,16 +85,35 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"></path>
                                         </svg>
+                                        Save
                                     </a>
 
                                 </div>
 
                             </div>
                         </div>
+                </div>
+                </div>
+            {{/each}}
+            </div>
+
+            {{!-- ========= Edit Post Modal ========== --}}
+            <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div id="model-content" class="modal-content">
+                        {{!-- Modle title --}}
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Post</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+
+                        {{!-- form --}}
+                        <div class="edit-post-modal"></div>
                     </div>
                 </div>
             </div>
-            {{/each}}
+
             {{!-- ======= Pagination ======== --}}
             {{!-- <div class="d-flex">
                 <ul class="pagination ms-auto">
@@ -133,3 +154,16 @@
         </div>
     </div>
 </div>
+
+{{!-- Event File --}}
+{{#section "script"}}
+<script src="./javascripts/index.js"></script>
+<script>
+    $(document).ready(function(){
+
+        new listAllPostEvent();
+        
+    })
+</script>
+{{/section}}
+
