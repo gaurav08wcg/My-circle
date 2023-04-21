@@ -38,6 +38,10 @@ const postSchema = new mongoose.Schema({
         path:{
             type:String
         },
+    },
+    isArchived:{
+        type: Boolean,
+        default: false,
     }
 },options);
 

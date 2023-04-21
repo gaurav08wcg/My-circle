@@ -1,55 +1,59 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const md5 = require("md5")
+const md5 = require("md5");
 const { usersModel } = require("../model/users");
 const { postModel } = require("../model/post");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const ObjectId = require("mongoose").Types.ObjectId;
 
 /* ====== Local strategy define ====== */
-passport.use(new LocalStrategy(
-  {
-    usernameField: "email",
-    passwordField: "password",
-    passReqToCallback: true
-  },
-  async function (req, email, password, done) {
-    console.log("----------- find user ---------");
-    usersModel.findOne(
-      {
-        email: {
-          $regex: "^" + email + "$",
-          $options: "i",
-        },
-        password: md5(password),
-      },
-    )
-      .then((user) => {
-        console.log("-------- inside .then() ---------")
-        console.log("user =>", user);
-        // user not found
-        if (!user) {
-          console.log("-------- user not found ---------");
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+      passReqToCallback: true,
+    },
+    async function (req, email, password, done) {
+      console.log("----------- find user ---------");
+      usersModel
+        .findOne({
+          email: {
+            $regex: "^" + email + "$",
+            $options: "i",
+          },
+          password: md5(password),
+        })
+        .then((user) => {
+          console.log("-------- inside .then() ---------");
+          console.log("user =>", user);
+          // user not found
+          if (!user) {
+            console.log("-------- user not found ---------");
+            return done(null, false, {
+              message: "Please enter valid login details",
+            });
+          }
+          // user found
+          else {
+            console.log(
+              "======================/* user successfully founded */======================"
+            );
+            console.log("user =>", user);
+            return done(null, user);
+          }
+        })
+        // handle catch
+        .catch(function (err) {
+          console.log("err =>", err);
           return done(null, false, {
             message: "Please enter valid login details",
           });
-        }
-        // user found
-        else {
-          console.log("======================/* user successfully founded */======================");
-          console.log("user =>", user);
-          return done(null, user);
-        }
-      })
-      // handle catch
-      .catch(function (err) {
-        console.log("err =>", err);
-        return done(null, false, {
-          message: "Please enter valid login details",
         });
-      });
-  }
-));
+    }
+  )
+);
 
 /* =========== serialize user ===========*/
 passport.serializeUser(function (user, done) {
@@ -71,43 +75,79 @@ passport.deserializeUser(function (user, done) {
 });
 
 /* GET home page ( Landing page ). */
-router.get('/', async function (req, res, next) {
+router.get("/", async function (req, res, next) {
   try {
+    // query data
+    const filter = req.query.filter;
+    const search = req.query.search;
+
     const pipeline = [];
-    const lookup = {
+    const match = {
+      $match: { isArchived: false },
+    };
+    pipeline.push(match);
+    pipeline.push({
       $lookup: {
         from: "users",
         localField: "postBy",
         foreignField: "_id",
-        as: "post_with_users"
-      }
+        as: "post_with_users",
+      },
+    });
+    pipeline.push({
+      $project: {
+        title: 1,
+        description: 1,
+        postBy: 1,
+        postBy: { $first: "$post_with_users" },
+        postImage: "$postImage.name",
+        createdAt: 1,
+      },
+    });
+
+    // if user do filter post
+    if(filter){
+        switch (filter) {
+          // user select "mine post"
+          case "mine":{
+            match.$match["postBy"] =  new ObjectId(req.user._id)
+            break;
+          }
+
+          // user select "mine post"
+          case "other":{
+            match.$match["postBy"] =  { $ne: new ObjectId(req.user._id) }
+            break;
+          }
+          default:
+            break;
+        }    
     }
-    const unwind = {
-      $unwind: "$post_with_users"
-    }
-    pipeline.push(lookup);
-    pipeline.push(unwind);
 
     const allPost = await postModel.aggregate(pipeline);
-    // console.log("pipeline =>", pipeline);
+    console.log("pipeline =>", pipeline);
     console.log("allPost =>", allPost);
 
-    res.render('index', { title: 'Home', posts: allPost });
+    res.render("index", {
+      title: "Home",
+      posts: allPost,
+      totalPosts: allPost.length,
+    });
   } catch (error) {
     console.log("error => ", error);
-    res.render("error", { message: error })
+    res.render("error", { message: error });
   }
 });
 
 /* Signup */
 router.get("/signup", (req, res, next) => {
   try {
-    res.render("signup/index", { layout: "auth", title: "sign up" })
+    res.render("signup/index", { layout: "auth", title: "sign up" });
   } catch (error) {
     console.log("error =>", error);
-    res.render("error", { message: error })
+    res.render("error", { message: error });
   }
-})
+});
 
 router.post("/signup", async (req, res, next) => {
   try {
@@ -116,19 +156,19 @@ router.post("/signup", async (req, res, next) => {
     await usersModel.create(bodyData);
     res.redirect("/signin");
   } catch {
-    res.redirect("/signin")
+    res.redirect("/signin");
   }
-})
+});
 
 /* Sign in */
 router.get("/signin", (req, res, next) => {
   try {
-    res.render("signin/index", { layout: "auth", title: "sign in" })
+    res.render("signin/index", { layout: "auth", title: "sign in" });
   } catch (error) {
     console.log("error =>", error);
-    res.render("error", { message: error })
+    res.render("error", { message: error });
   }
-})
+});
 
 router.post("/signin", async (req, res, next) => {
   try {
@@ -168,11 +208,11 @@ router.get("/logout/", async (req, res, next) => {
   try {
     console.log("logout");
     await req.logout();
-    return res.redirect('/');
+    return res.redirect("/");
   } catch (error) {
     console.log("error =>", error);
     res.redirect("/signin");
   }
-})
+});
 
 module.exports = router;

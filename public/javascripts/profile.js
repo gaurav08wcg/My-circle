@@ -7,6 +7,12 @@ const profileEvent = function () {
 
   // form validate
   _this.validateEditProfileFrom = function () {
+
+    // add filesize method
+    $.validator.addMethod('filesize', function(value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param) 
+    });
+
     $("#edit-profile-form").validate({
         rules: {
           firstName: "required",

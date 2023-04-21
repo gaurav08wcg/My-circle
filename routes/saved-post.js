@@ -52,7 +52,7 @@ router.get('/', async function (req, res, next) {
                 }
             }
         );
-        console.log("pipeline =>", pipeline);
+        // console.log("pipeline =>", pipeline);
 
         const savedPosts = await savedPostModel.aggregate(pipeline);
         console.log("savedPosts =>", savedPosts);
@@ -84,5 +84,6 @@ router.post("/:id", async (req, res, next) => {
         res.render("error", { message: error })
     }
 });
+
 
 module.exports = router;

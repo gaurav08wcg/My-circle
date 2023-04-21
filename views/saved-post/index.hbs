@@ -57,7 +57,7 @@
 
                                     {{!-- edit post icon --}}
                                     {{!-- only edit user's own post  --}}
-                                    {{#compare postBy "==" ../user._id}}
+                                    {{!-- {{#compare postBy "==" ../user._id}}
                                     <a href="#" id="edit-post-btn" data-post-id="{{_id}}"  class="text-muted" data-bs-toggle="modal" data-bs-target="#modal-report"  aria-label="edit post" data-bs-original-title="edit post" data-bs-target="#modal-report">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -75,10 +75,10 @@
                                         </svg>
                                         Edit
                                     </a>
-                                    {{/compare}}
+                                    {{/compare}} --}}
 
                                     {{!-- post save icon --}}
-                                    <a href="#" class="ms-3 text-muted" data-bs-toggle="tooltip"
+                                    <a id="saved-post-btn" data-post-id="{{postDetails._id}}" href="#" class="ms-3 text-muted" data-bs-toggle="tooltip"
                                         data-bs-original-title="Save post">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +88,6 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"></path>
                                         </svg>
-                                        Save
                                     </a>
 
                                 </div>
@@ -104,3 +103,16 @@
             </div>
         </div>
     </div>
+
+{{!-- Event file --}}
+{{#section "script"}}
+<script src="./javascripts/saved-post.js"></script>
+<script src="./javascripts/index.js" ></script>
+
+<script>
+    $(document).ready( function(){
+        new savedPostEvent();
+    })
+</script>
+
+{{/section}}

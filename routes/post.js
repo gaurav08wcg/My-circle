@@ -7,6 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 const { log } = require('console');
+const { route } = require('.');
 
 // create storage
 const storage = multer.diskStorage({
@@ -103,5 +104,26 @@ router.post("/edit/:id", upload.single("postImage"),async (req,res,next) => {
     }  
 })
 
+/* archive */
+router.post("/archive/:id", async (req,res,next) =>{
+  try {
+    console.log(req.params);
+
+    const isArchived = await postModel.findOne({ _id: req.params.id, isArchived: "true" });
+    console.log("archived =>", isArchived);
+    // if already archive
+    if(isArchived){
+      await postModel.updateOne({ _id: req.params.id }, { $set:{ isArchived: "false" } });
+      return res.redirect("/");
+    }
+
+    // set archived true
+    await postModel.updateOne({ _id: req.params.id }, { $set:{ isArchived: "true" } });
+    res.redirect("/");
+
+  } catch (error) {
+    res.render("error", { message: error })    
+  }
+});
 
 module.exports = router;

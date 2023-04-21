@@ -3,10 +3,47 @@
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
+                {{!-- total posts --}}
                 <div class="col">
                     <h2 class="page-title">
-                        All Post
+                        Posts
                     </h2>
+
+                    <div class="text-muted mt-1">1-18 of {{totalPosts}} Posts</div>
+                </div>
+
+                {{!-- post Filter Drop down --}}
+                <div class="col-2">
+                    <select id="post-filter-drop-down" type="text" class="form-select" placeholder="Select a date" >
+                        <option class="filter-option" value="all">All Post</option>
+                        <option class="filter-option" value="mine">Mine</option>
+                        <option class="filter-option" value="other">Others</option>
+                    </select>
+                </div>
+
+
+
+                {{!-- search field --}}
+                <div class="input-icon col-2">
+                    <span class="input-icon-addon">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                            <path d="M21 21l-6 -6"></path>
+                        </svg>
+                    </span>
+                    <input id="search-post" name="searchPost" type="text"  class="form-control"
+                        placeholder="Search post…" aria-label="Search in website">
+                </div>
+
+                {{!-- search post btn --}}
+                <div class="col-1">
+                    <a href="#" id="search-post-btn" class="btn btn-primary w-100">
+                        Search
+                    </a>
                 </div>
             </div>
         </div>
@@ -22,14 +59,52 @@
                 <div class="col-sm-6 col-lg-4">
                     <div class="card card-sm">
 
-                        {{!-- post title --}}
+                        {{!-- Post Header --}}
                         <div class="card-header">
+
+                            {{!-- Post title --}}
                             <h3 class="card-title"> <b>{{title}}</b></h3>
+
+                            {{!-- Archive post --}}
+                            <div class="card-actions">
+                                <div class="dropdown">
+                                    <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"><!-- Download SVG icon from http://tabler-icons.io/i/dots-vertical -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                            <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                            <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                        </svg>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        {{!-- Only archive & edit user own post --}}
+                                        {{#compare postBy._id "==" ../user._id}}
+                                        {{!-- archive btn --}}
+                                        <a id="archive-post-btn" class="dropdown-item" href="#"
+                                            data-post-id="{{_id}}">Archive</a>
+                                        {{!-- edit post --}}
+                                        <a id="edit-post-btn" class="dropdown-item" data-post-id="{{_id}}"
+                                           data-bs-toggle="modal" data-bs-target="#modal-report" data-bs-original-title="edit post" href="#">Edit</a>
+                                        {{/compare}}
+                                        {{!-- id user loged in then show save btn --}}
+                                        {{#if ../user}}
+                                            {{#compare postBy._id "!=" ../user._id}}
+                                                <a id="saved-post-btn" href="#" data-post-id="{{_id}}" class="dropdown-item "
+                                                href="#">Save</a>
+                                           {{/compare}}
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         {{!-- post image --}}
                         <a href="#" class="d-block">
-                            <img src="/uploads/posts/{{postImage.name}}" class="card-img-top">
+                            <img src="/uploads/posts/{{postImage}}" class="card-img-top">
                         </a>
                         <div class="card-body">
 
@@ -40,13 +115,15 @@
                             <div class="d-flex align-items-center">
 
                                 {{!-- post's user profile --}}
-                                {{!-- <span class="avatar me-3 rounded"
-                                    style="background-image: url(./static/avatars/000m.jpg)"></span> --}}
+                                <img class="avatar me-3 rounded "
+                                    src="./uploads/profilePicture/{{postBy.profilePicture.name}}" alt="user-avatar" />
 
                                 {{!-- user's name --}}
                                 <div>
-                                    <div><b>{{post_with_users.firstName}} {{post_with_users.lastName}}</b> </div>
-                                    {{!-- <div class="text-muted">3 days ago</div> --}}
+                                    <div><b>{{postBy.firstName}} {{postBy.lastName}}</b> </div>
+
+                                    {{!-- post Create Date --}}
+                                    <div class="text-muted">{{moment createdAt}}</div>
                                 </div>
 
                                 <div class="ms-auto">
@@ -54,7 +131,7 @@
 
                                     {{!-- edit post icon --}}
                                     {{!-- only edit user's own post --}}
-                                    {{#compare postBy "==" ../user._id}}
+                                    {{!-- {{#compare postBy._id "==" ../user._id}}
                                     <a href="#" id="edit-post-btn" data-post-id="{{_id}}" class="text-muted"
                                         data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="edit post"
                                         data-bs-original-title="edit post" data-bs-target="#modal-report">
@@ -74,10 +151,10 @@
                                         </svg>
                                         Edit
                                     </a>
-                                    {{/compare}}
+                                    {{/compare}} --}}
 
                                     {{!-- post save icon --}}
-                                    {{#if ../user}}
+                                    {{!-- {{#if ../user}}
                                     <a id="saved-post-btn" href="#" data-post-id="{{_id}}" class="ms-3 text-muted"
                                         data-bs-toggle="tooltip" data-bs-original-title="Save post">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
@@ -89,7 +166,7 @@
                                             <path d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"></path>
                                         </svg>
                                     </a>
-                                    {{/if}}
+                                    {{/if}} --}}
 
                                 </div>
 
@@ -155,6 +232,7 @@
             {{/if}}
         </div>
     </div>
+
 </div>
 
 {{!-- Event File --}}

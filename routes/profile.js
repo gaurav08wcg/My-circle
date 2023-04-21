@@ -80,8 +80,8 @@ router.post("/", upload.single("profilePicture"), async (req, res, next) => {
     // return console.log("file =>", file);
     // update user schema
     await usersModel.updateOne({ _id: req.user._id }, { $set: bodyData });
-    req.flash("info", "profile update successfully..");
-    res.render("profile/index", { messages: "profile update successfully.." });
+    // req.flash("info", "profile update successfully..");
+    res.redirect("/profile");
   } catch (error) {
     res.render("error", { message: error });
   }

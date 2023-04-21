@@ -6,10 +6,14 @@ var logger = require("morgan");
 const session = require("express-session");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
-var handlebarHelpers = require('handlebars-helpers')();  // handlebar helpers
 var flash = require('connect-flash');
+var moment = require("moment");
+
+var handlebarHelpers = require('handlebars-helpers')();  // handlebar helpers
+const customHelper = require("./utils/helpers");  // custom helpers file 
 const commonFun = require("./common/functions");
 
+/* Require Route files */
 var indexRouter = require("./routes/index");
 var profileRouter = require("./routes/profile");
 var postRouter = require("./routes/post");
@@ -21,16 +25,7 @@ var app = express();
 
 /* ========= Handlebar setup ============ */
 const exphbs = require("express-handlebars");
-const customHelper = {
-  section: function (name, options) {
-        if (!this._sections) this._sections = {};
-        this._sections[name] = options.fn(this);
-        return null;
-      },
-  log: function(data){
-    console.log(`handlebar logs  => `, data);
-  }
-}
+
 const hbs = exphbs.create({
   extname: ".hbs",
   defaultLayout: "main",
