@@ -4,46 +4,49 @@ const ObjectId = mongoose.Schema.ObjectId;
 //  options for users
 const options = {
     timestamps: {
-      createdOn: "createdOn",
-      updatedOn: "updatedOn",
+        createdOn: "createdOn",
+        updatedOn: "updatedOn",
     },
-  }; 
+    collation: {
+        locale: "en"  // define English language
+    }
+};
 
 const postSchema = new mongoose.Schema({
-    title:{
-        type:String,
-        require:true
+    title: {
+        type: String,
+        require: true
     },
-    description:{
-        type:String,
-        require:true        
+    description: {
+        type: String,
+        require: true
     },
-    postBy:{
+    postBy: {
         type: ObjectId,
-        require:true,
-        ref:"users"
+        require: true,
+        ref: "users"
     },
-    savedBy:[
+    savedBy: [
         {
             userId: {
-                type:ObjectId,
+                type: ObjectId,
                 ref: "users"
             },
         }
     ],
-    postImage:{
-        name:{
+    postImage: {
+        name: {
             type: String
         },
-        path:{
-            type:String
+        path: {
+            type: String
         },
     },
-    isArchived:{
+    isArchived: {
         type: Boolean,
         default: false,
     }
-},options);
+}, options);
 
 const postModel = mongoose.model("post", postSchema);
 

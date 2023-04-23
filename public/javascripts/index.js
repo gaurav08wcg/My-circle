@@ -5,7 +5,9 @@ const listAllPostEvent = function () {
         _this.editPostButton();
         _this.savedPostButton();
         _this.archivePostButton();
-        _this.filterPost()
+        _this.filterPost();
+        _this.sortPostByTitle();
+        _this.sortPostByDateTime()
     }
 
     // edit post model open
@@ -42,65 +44,131 @@ const listAllPostEvent = function () {
                 url: `saved-post/${postId}`,
                 success: function (response) {
                     console.log("response =>", response);
-                    
-                    // change tooltip title
-                    // $(this).attr("data-bs-original-title", response);
-                    
                     alert(response);
-
-                    // after save refresh current page
-                    // window.location.href = $(location).attr('href');
                 },
                 error: function (error) {
-                    $("body").html(error);
+                    $(".page-body").html(error);
                 }
             })
         })
     }
 
     // archive post event
-    _this.archivePostButton = function(){
-        $(document).on("click","#archive-post-btn", function(e){
+    _this.archivePostButton = function () {
+        $(document).on("click", "#archive-post-btn", function (e) {
             e.preventDefault();
             const postId = $(this).attr("data-post-id");
 
             $.ajax({
-                method:"post",
-                url:`/post/archive/${postId}`,
+                method: "post",
+                url: `/post/archive/${postId}`,
             })
             window.location.href = $(location).attr('href');
         });
     }
 
     // filer post event
-    _this.filterPost = function(){
-        $(document).off("click","#search-post-btn").on("click","#search-post-btn", function(){
+    _this.filterPost = function () {
+        $(document).off("click", "#search-post-btn").on("click", "#search-post-btn", function () {
             // e.preventDefault();
-            
+
             // filter select option value & search value
             const filter = $('#post-filter-drop-down :selected').val();
-            const search = $("#search-post").val();
+            const search = encodeURIComponent($("#search-post").val().trim());
+            console.log(search);
+
 
             $.ajax({
-                method:"get",
-                url:`/?filter=${filter}&search=${search}`,
-                success: function(response){
-                    console.log(response);
+                method: "get",
+                url: `/?filter=${filter}&search=${search}`,
+                success: function (response) {
+                    // console.log(response);
 
-                    // method 1 - for Ajax response load
-                    // const element  = $(response).find(".page-body")
-                    // $(".page-body").html(element);
-                    
-                    // method - 2
+                    // method - 2 (Load Method)
                     const url = `/?filter=${filter}&search=${search}`;
                     const element = `div.page-body`;
-                    $(".page-body").load(`${url} ${element}`);
+                    $(".page-body").load(`${url} ${element}`);  // posts
+                    $("#total-post").load(`${url} div#total-post`);     // total post count
 
                 },
-                error: function(response){
+                error: function (response) {
                 }
             })
         })
+    }
+
+    // sort post by title
+    _this.sortPostByTitle = function () {
+        let click = 1;
+        $("#btn-sort-title").on("click", function () {
+
+            // odd click
+            if (click % 2 == 1) {
+                // console.log("on");
+
+                $.ajax({
+                    url: `/?sortBy=title&order=1`,
+                    method: "get",
+                    success: function (responce) {
+                        // console.log(responce);
+                        $(".page-body").load(`/?sortBy=title&order=1 div.page-body`);
+                    }
+                });
+            }
+
+            // even click
+            else {
+                // console.log("off");
+
+                $.ajax({
+                    url: `/?sortBy=title&order=-1`,
+                    method: "get",
+                    success: function (responce) {
+                        // console.log(responce);
+                        $(".page-body").load(`/?sortBy=title&order=-1 div.page-body`);
+                    }
+                });
+            };
+            click += 1;
+        });
+
+    }
+
+    // sort post by date time
+    _this.sortPostByDateTime = function () {
+        let click = 1;
+        $("#btn-sort-datetime").on("click", function () {
+
+            // odd click
+            if (click % 2 == 1) {
+                // console.log("on");
+
+                $.ajax({
+                    url: `/?sortBy=dateTime&order=1`,
+                    method: "get",
+                    success: function (responce) {
+                        // console.log(responce);
+                        $(".page-body").load(`/?sortBy=dateTime&order=1 div.page-body`);
+                    }
+                });
+            }
+
+            // even click
+            else {
+                // console.log("off");
+
+                $.ajax({
+                    url: `/?sortBy=dateTime&order=-1`,
+                    method: "get",
+                    success: function (responce) {
+                        // console.log(responce);
+                        $(".page-body").load(`/?sortBy=dateTime&order=-1 div.page-body`);
+                    }
+                });
+            };
+            click += 1;
+        });
+
     }
 
     _this.init();

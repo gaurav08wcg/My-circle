@@ -79,7 +79,40 @@ router.get("/", async function (req, res, next) {
   try {
     // query data
     const filter = req.query.filter;
-    const search = req.query.search;
+    const sortBy = req.query.sortBy;
+    const order = Number(req.query.order);
+
+    let search = decodeURIComponent(req.query.search);
+    let sortType = "createdAt";
+    let sortOrder = -1;
+
+    // if recive undefined string search in  
+    if (search == "undefined") {
+      search = undefined;
+    }
+    console.log("filter =>", filter);
+    console.log("search =>", search);
+    console.log("sortBy =>", sortBy);
+
+    // if sort post
+    if (sortBy) {
+      // title
+      if (sortBy == "title") {
+
+        sortType = sortBy;
+        sortOrder = order;
+
+        // sortType = "title";
+        // sortOrder = 1;
+        console.log("pipline sort =>", sortType, sortOrder);
+      }
+
+      // date time
+      if (sortBy == "dateTime") {
+        sortType = "createdAt";
+        sortOrder = order;
+      }
+    }
 
     const pipeline = [];
     const match = {
@@ -104,24 +137,47 @@ router.get("/", async function (req, res, next) {
         createdAt: 1,
       },
     });
+    pipeline.push({
+      $sort: {
+        [sortType]: sortOrder
+      }
+    });
 
     // if user do filter post
-    if(filter){
-        switch (filter) {
-          // user select "mine post"
-          case "mine":{
-            match.$match["postBy"] =  new ObjectId(req.user._id)
-            break;
-          }
+    if (filter) {
+      match.$match["$or"] = [];
+      console.log("$or =>", match.$match);
 
-          // user select "mine post"
-          case "other":{
-            match.$match["postBy"] =  { $ne: new ObjectId(req.user._id) }
-            break;
-          }
-          default:
-            break;
-        }    
+      switch (filter) {
+        // user select "mine post"
+        case "mine": {
+          // match.$match["postBy"] = new ObjectId(req.user._id)
+          match.$match?.$or?.push({ "postBy": new ObjectId(req.user._id) })
+          console.log("filter-mine =>", match.$match.$or);
+          break;
+        }
+
+        // user select "mine post"
+        case "other": {
+          // match.$match["postBy"] = { $ne: new ObjectId(req.user._id) }
+          match.$match?.$or?.push({ "postBy": { $ne: new ObjectId(req.user._id) } })
+          console.log("filter-other =>", match.$match.$or);
+          break;
+        }
+        default:
+          match.$match?.$or?.push({ "postBy": { $exists: true } });
+          console.log("filter-all =>", match.$match.$or);
+          break;
+      }
+    }
+
+    // if serach a post
+    if (search) {
+      match.$match["$or"] = [
+        { title: search },
+        { description: search }
+      ];
+      console.log("filter + seatch =>", match.$match.$or);
     }
 
     const allPost = await postModel.aggregate(pipeline);
