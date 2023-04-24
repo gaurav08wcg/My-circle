@@ -6,6 +6,10 @@ const ObjectId = require("mongoose").Types.ObjectId;
 /* show Saved Posts */
 router.get('/', async function (req, res, next) {
     try {
+
+        // when click un save button
+        if(req.query.unSave) await savedPostModel.deleteOne({postId: new ObjectId(req.query.postId)}) ;
+
         const pipeline = [];
         const match = { $match: { savedBy: new ObjectId(req.user._id) } };
         pipeline.push(match);
@@ -55,9 +59,10 @@ router.get('/', async function (req, res, next) {
         // console.log("pipeline =>", pipeline);
 
         const savedPosts = await savedPostModel.aggregate(pipeline);
+
         console.log("savedPosts =>", savedPosts);
 
-        res.render("saved-post/index", { title: "saved-posts", savedPosts: savedPosts })
+        res.render("saved-post/index", { title: "saved-posts", totalPosts: savedPosts.length, savedPosts: savedPosts })
     } catch (error) {
         res.render("error", { message: error })
     }
@@ -71,7 +76,7 @@ router.post("/:id", async (req, res, next) => {
         const alreadySaved = await savedPostModel.findOne({ postId: req.params.id, savedBy: req.user._id });
         console.log("alreadySaved =>", alreadySaved);
         // if already saved
-        if (alreadySaved) {
+        if (alreadySaved) { 
             await savedPostModel.deleteOne({ postId: req.params.id, savedBy: req.user._id });
             return res.send("post unsaved");
         }
