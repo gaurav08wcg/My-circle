@@ -18,12 +18,12 @@ const profileEvent = function () {
           firstName: "required",
           lastName: "required",
           email: {
-            required: true,
+            // required: true,
             email: true,
-            // remote:{
-            //     url:"/email",
-            //     method:"get"
-            // }
+            remote:{
+              // url:"/validate/email",
+              method:"get"
+            }
           },
           profilePicture:{
             extension: "png|jpeg|jpg",
@@ -40,6 +40,7 @@ const profileEvent = function () {
           email: {
             required: "email is required",
             email: "enter valid email",
+            // remote: "email already existed"
           },
           profilePicture:"File must be JPEG or PNG, less than 5MB" 
         },

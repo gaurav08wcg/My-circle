@@ -5,9 +5,9 @@ const listAllPostEvent = function () {
         _this.editPostButton();
         _this.savedPostButton();
         _this.archivePostButton();
-        _this.filterPost();
+        _this.filterAndSearchPost();
         _this.sortPostByTitle();
-        _this.sortPostByDateTime()
+        _this.sortPostByDateTime();
     }
 
     // edit post model open
@@ -59,36 +59,48 @@ const listAllPostEvent = function () {
             e.preventDefault();
             const postId = $(this).attr("data-post-id");
 
+            // hard archive 
+            // $.ajax({
+            //     method: "post",
+            //     url: `/post/archive/${postId}`,
+            // })
+            // window.location.href = $(location).attr('href');
+
             $.ajax({
-                method: "post",
-                url: `/post/archive/${postId}`,
+                method:"get",
+                url:`/?postId=${postId}&archive=true`,
+                success: function(response){
+                    console.log(response);
+                    $(".page-body").load(`/?postId=${postId}?archive=true .page-body`)
+                },
+                error: function (error) {
+                    
+                }
             })
-            window.location.href = $(location).attr('href');
         });
     }
 
     // filer post event
-    _this.filterPost = function () {
+    _this.filterAndSearchPost = function () {
         $(document).off("click", "#search-post-btn").on("click", "#search-post-btn", function () {
             // e.preventDefault();
 
             // filter select option value & search value
             const filter = $('#post-filter-drop-down :selected').val();
-            const search = encodeURIComponent($("#search-post").val().trim());
+            const search = $("#search-post").val();
             console.log(search);
-
+            const query = `/?filter=${filter}&search=${search}`;
 
             $.ajax({
-                method: "get",
                 url: `/?filter=${filter}&search=${search}`,
+                method: "get",
                 success: function (response) {
                     // console.log(response);
 
                     // method - 2 (Load Method)
-                    const url = `/?filter=${filter}&search=${search}`;
-                    const element = `div.page-body`;
-                    $(".page-body").load(`${url} ${element}`);  // posts
-                    $("#total-post").load(`${url} div#total-post`);     // total post count
+                    console.log(search);
+                    $(".page-body").load(`${query} .page-body`);  // posts
+                    // $("#total-post").load(`${url} div#total-post`);     // total post count
 
                 },
                 error: function (response) {
