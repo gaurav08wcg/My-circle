@@ -20,6 +20,7 @@ var postRouter = require("./routes/post");
 var savedPostRouter = require("./routes/saved-post");
 var usersRouter = require("./routes/users");
 var reportRouter = require("./routes/report");
+var archivedPostRouter = require("./routes/archived-post");
 
 var app = express();
 
@@ -83,6 +84,7 @@ app.use(commonFun.checkAuth)
 app.use("/profile", profileRouter);
 app.use("/post", postRouter);
 app.use("/saved-post", savedPostRouter);
+app.use("/archived-post", archivedPostRouter);
 app.use("/users", usersRouter);
 app.use("/report", reportRouter);
 
