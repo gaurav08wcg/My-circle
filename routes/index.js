@@ -75,20 +75,20 @@ passport.deserializeUser(function (user, done) {
 });
 
 /* email validation */
-router.get("/validate/email", async (req,res, next) =>{
-try {
-  console.log("req.query",req.query);
-  
-  const isEmail = await usersModel.findOne({ email: req.query.email }, { email:1 })
+router.get("/validate/email", async (req, res, next) => {
+  try {
+    console.log("req.query", req.query);
 
-  // when email is exist 
-  if(isEmail) return res.send(false);
-  
-  return res.send(true);
+    const isEmail = await usersModel.findOne({ email: req.query.email }, { email: 1 })
 
-} catch (error) {
-  res.render("error", { message: error });
-}
+    // when email is exist 
+    if (isEmail) return res.send(false);
+
+    return res.send(true);
+
+  } catch (error) {
+    res.render("error", { message: error });
+  }
 });
 
 /* GET home page ( Landing page ). */
@@ -98,23 +98,25 @@ router.get("/", async function (req, res, next) {
     const filter = req.query.filter;
     const sortBy = req.query.sortBy;
     const order = Number(req.query.order);
-    // const postId = req.params.postId;
-    // const archive = req.query.archive;
+
+    // pagination variables 
+    const limit = 5;
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * limit;
+
     let search = req.query.search;
     // console.log(req.query.search);
 
-    // console.log("postId => ", postId);
-    // console.log("archive => ", archive);
-    
     // if user click on archive
-    if(req.query.archive) await postModel.updateOne({_id : new ObjectId(req.query.postId)}, { isArchived: true })
+    if (req.query.archive) await postModel.updateOne({ _id: new ObjectId(req.query.postId) }, { isArchived: true })
 
     // for sorting
     let sortType = "createdAt";
     let sortOrder = -1;
 
     const match = {
-      $match: { isArchived: false,
+      $match: {
+        isArchived: false,
       },
     };
     // if recive undefined string search in  
@@ -129,20 +131,20 @@ router.get("/", async function (req, res, next) {
       // console.log("$or =>", match.$match);
       switch (filter) {
         // user select "mine post"
-        case "mine": 
+        case "mine":
           match.$match["postBy"] = new ObjectId(req.user._id)
           // match.$match?.$or?.push({ "postBy": new ObjectId(req.user._id) })
           console.log("filter-mine =>", match.$match.$or);
           break;
-        
+
 
         // user select "mine post"
-        case "other": 
+        case "other":
           match.$match["postBy"] = { $ne: new ObjectId(req.user._id) }
           // match.$match?.$or?.push({ "postBy": { $ne: new ObjectId(req.user._id) } })
           console.log("filter-other =>", match.$match.$or);
           break;
-        
+
         default:
           break;
       }
@@ -151,15 +153,15 @@ router.get("/", async function (req, res, next) {
     // if search a post
     if (search) {
       match.$match["$or"] = [
-        { title: { $regex : search, $options : 'i'}  },
-        { description: { $regex : search, $options : 'i'} }
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
       ];
       console.log("filter + search =>", match.$match.$or);
     }
 
     console.log("filter =>", filter);
     console.log("search =>", search);
-    
+
     // if sort post
     if (sortBy) {
       // title
@@ -181,7 +183,7 @@ router.get("/", async function (req, res, next) {
     }
 
     const pipeline = [];
-    
+
     pipeline.push(match);
     pipeline.push({
       $lookup: {
@@ -207,14 +209,31 @@ router.get("/", async function (req, res, next) {
       }
     });
 
+    pipeline.push(
+      { $skip: skip },
+      { $limit: limit }
+    )
+
     const allPost = await postModel.aggregate(pipeline);
     // console.log("pipeline =>", pipeline);
     console.log("allPost =>", allPost);
 
+    // count total post
+    const totalPost = await postModel.find().count();
+
+    // total no of pages
+    const pages = [];
+    for (let i = 1; i <= Math.ceil(totalPost / limit); i++) {
+      pages.push(i);
+    }
+
+    console.log("no of poges =>", pages);
+
     res.render("index", {
       title: "Home",
       posts: allPost,
-      totalPosts: allPost.length,
+      totalPosts: totalPost,
+      pages: pages
     });
   } catch (error) {
     console.log("error => ", error);

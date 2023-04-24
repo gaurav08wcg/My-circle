@@ -8,6 +8,7 @@ const listAllPostEvent = function () {
         _this.filterAndSearchPost();
         _this.sortPostByTitle();
         _this.sortPostByDateTime();
+        _this.pagination();
     }
 
     // edit post model open
@@ -67,14 +68,14 @@ const listAllPostEvent = function () {
             // window.location.href = $(location).attr('href');
 
             $.ajax({
-                method:"get",
-                url:`/?postId=${postId}&archive=true`,
-                success: function(response){
+                method: "get",
+                url: `/?postId=${postId}&archive=true`,
+                success: function (response) {
                     console.log(response);
                     $(".page-body").load(`/?postId=${postId}?archive=true .page-body`)
                 },
                 error: function (error) {
-                    
+
                 }
             })
         });
@@ -181,6 +182,23 @@ const listAllPostEvent = function () {
             click += 1;
         });
 
+    }
+
+    // pagination 
+    _this.pagination = function () {
+        $(document).on("click", ".page-link", function () {
+            // $(this).parent().addClass("acitve")
+            const page = $(this).attr("data-page-no");
+            // console.log(page);
+
+            $.ajax({
+                method: 'get',
+                url: `/?page=${page}`,
+                success: function (response) {
+                    $('.page-body').load(`/?page=${page} .page-body`)
+                }
+            })
+        })
     }
 
     _this.init();
