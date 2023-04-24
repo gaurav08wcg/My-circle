@@ -22,10 +22,10 @@ const signupEvent = function () {
         email: {
           required: true,
           email: true,
-          // remote:{
-          //     url:"/email",
-          //     method:"get"
-          // }
+          remote:{
+              url:"/validate/email",
+              method:"get"
+          }
         },
         password: {
           required: true,
@@ -47,6 +47,7 @@ const signupEvent = function () {
         email: {
           required: "email is required",
           email: "enter valid email",
+          remote: "email already existed"
         },
         password: {
           required: "password is required",
