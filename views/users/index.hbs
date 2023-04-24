@@ -8,11 +8,18 @@
                     <h2 class="page-title">
                         Users
                     </h2>
-
-                    <div class="text-muted mt-1">1-18 of {{totalUsers}} Users</div>
-
-                    {{!-- Sarch btn --}}
+                    
+                    {{!-- total user --}}
+                    <div id="total-users" class="text-muted mt-1">1-18 of {{totalUsers}} Users</div>
                 </div>
+
+                {{!-- Sorting --}}
+                {{!-- by register date --}}
+                <div class="col-1 ">
+                    <button id="btn-sort-datetime" class="table-sort " data-sort="sort-name">Register Date</button>
+                </div>
+
+                {{!-- Search user --}}
                 <div class="input-icon col-2">
                     <span class="input-icon-addon">
                         <!-- Download SVG icon from http://tabler-icons.io/i/search -->
@@ -24,7 +31,7 @@
                             <path d="M21 21l-6 -6"></path>
                         </svg>
                     </span>
-                    <input type="text" value="" class="form-control" placeholder="Search…"
+                    <input id="search-user" type="text" class="form-control" placeholder="Search…"
                         aria-label="Search in website">
                 </div>
 
@@ -59,7 +66,7 @@
                             {{/if}}
 
                             {{!-- user name --}}
-                            <h3 class="m-0 mb-1"><a href="#">{{firstName}} {{lastName}}</a></h3>
+                            <h3 class="m-0 mb-1"><a href="#">{{fullName}}</a></h3>
 
                             {{!-- user email --}}
                             <div class="text-muted">{{email}}</div>
@@ -143,3 +150,16 @@
     </div>
 </div>
 </div>
+
+
+{{!-- Event File --}}
+{{#section "script"}}
+<script src="./javascripts/users.js"></script>
+<script>
+    $(document).ready(function () {
+
+        new listUsersEvent();
+
+    })
+</script>
+{{/section}}
