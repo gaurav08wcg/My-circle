@@ -8,7 +8,7 @@
                         saved post
                     </h2>
 
-                    <div id="total-post" class="text-muted mt-1">1-18 of {{totalPosts}} Posts</div>
+                    <div id="total-post" class="text-muted mt-1">{{currentPage}}-{{totalPages}} of {{totalPosts}} Posts</div>
                 </div>
             </div>
         </div>
@@ -79,6 +79,9 @@
                 <h3>No post</h3>
                 {{/if}}
             </div>
+
+            {{!-- ======= Pagination ======== --}}
+            {{>pagination}}
         </div>
     </div>
 
