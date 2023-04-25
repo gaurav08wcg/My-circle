@@ -7,6 +7,11 @@ const ObjectId = require("mongoose").Types.ObjectId;
 router.get('/', async function (req, res, next) {
     try {
 
+        // pagination variables 
+        const limit = 3;
+        const page = Number(req.query.page) || 1;
+        const skip = (page - 1) * limit;
+
         // when click un save button
         if(req.query.unSave) await savedPostModel.deleteOne({postId: new ObjectId(req.query.postId)}) ;
 
@@ -56,13 +61,38 @@ router.get('/', async function (req, res, next) {
                 }
             }
         );
+
+        // stage 5 - skip limit for pagination
+        pipeline.push(
+            { $skip: skip },
+            { $limit: limit }
+        )
         // console.log("pipeline =>", pipeline);
-
+        
+        // list of all saved post
         const savedPosts = await savedPostModel.aggregate(pipeline);
-
         console.log("savedPosts =>", savedPosts);
+        
+        // total count of saved post
+        const totalSavedPostCount = await savedPostModel.find({savedBy: new ObjectId(req.user._id)}).count();
+        console.log("totalSavedPostCount =>", totalSavedPostCount);
+        
+        // total no of pages
+        const pages = [];
+        for (let i = 1; i <= Math.ceil(totalSavedPostCount / limit); i++) {
+            pages.push(i);
+        }
 
-        res.render("saved-post/index", { title: "saved-posts", totalPosts: savedPosts.length, savedPosts: savedPosts })
+        res.render("saved-post/index", 
+            { 
+                title: "saved-posts", 
+                totalPosts: totalSavedPostCount, 
+                savedPosts: savedPosts,
+                pages: pages,
+                totalPages: Math.ceil(totalSavedPostCount / limit),
+                currentPage: page, 
+            }
+        )
     } catch (error) {
         res.render("error", { message: error })
     }
