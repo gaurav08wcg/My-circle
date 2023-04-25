@@ -1,7 +1,7 @@
 const listAllPostEvent = function () {
-    const _this = this;
+    
 
-    _this.init = function () {
+    this.init = function () {
         _this.editPostButton();
         _this.savedPostButton();
         _this.archivePostButton();
@@ -12,7 +12,7 @@ const listAllPostEvent = function () {
     }
 
     // edit post model open
-    _this.editPostButton = function () {
+    this.editPostButton = function () {
         $(document).on("click", "#edit-post-btn", function (e) {
             e.preventDefault();
 
@@ -33,7 +33,7 @@ const listAllPostEvent = function () {
     }
 
     // post save event
-    _this.savedPostButton = function () {
+    this.savedPostButton = function () {
         $(document).on("click", "#saved-post-btn", function (e) {
             e.preventDefault();
             // console.log("click");
@@ -55,24 +55,18 @@ const listAllPostEvent = function () {
     }
 
     // archive post event
-    _this.archivePostButton = function () {
+    this.archivePostButton = function () {
         $(document).on("click", "#archive-post-btn", function (e) {
             e.preventDefault();
             const postId = $(this).attr("data-post-id");
-
-            // hard archive 
-            // $.ajax({
-            //     method: "post",
-            //     url: `/post/archive/${postId}`,
-            // })
-            // window.location.href = $(location).attr('href');
+            const url = `/?postId=${postId}&archive=true`;
 
             $.ajax({
                 method: "get",
-                url: `/?postId=${postId}&archive=true`,
+                url: url,
                 success: function (response) {
-                    console.log(response);
-                    $(".page-body").load(`/?postId=${postId}?archive=true .page-body`)
+                    $(".page-body").load(`${url} .page-body`);
+                    window.history.pushState(null,null,url);
                 },
                 error: function (error) {
 
@@ -82,124 +76,133 @@ const listAllPostEvent = function () {
     }
 
     // filer post event
-    _this.filterAndSearchPost = function () {
+    this.filterAndSearchPost = function () {
         $(document).off("click", "#search-post-btn").on("click", "#search-post-btn", function () {
+            alert("search");
             // e.preventDefault();
 
             // filter select option value & search value
-            const filter = $('#post-filter-drop-down :selected').val();
-            const search = $("#search-post").val();
-            console.log(search);
-            const query = `/?filter=${filter}&search=${search}`;
+            const filter = encodeURIComponent($('#post-filter-drop-down :selected').val());
+            const search = encodeURIComponent($("#search-post").val());
+            const url = `/?filter=${filter}&search=${search}`;
 
-            $.ajax({
-                url: `/?filter=${filter}&search=${search}`,
-                method: "get",
-                success: function (response) {
-                    // console.log(response);
-
-                    // method - 2 (Load Method)
-                    console.log(search);
-                    $(".page-body").load(`${query} .page-body`);  // posts
-                    // $("#total-post").load(`${url} div#total-post`);     // total post count
-
-                },
-                error: function (response) {
-                }
-            })
+            $(".page-body").load(`${url} .page-body`, function (){
+                window.history.pushState(null,null,url);
+            });  
+            // $.ajax({
+            //     url: url,
+            //     method: "get",
+            //     success: function (response) {
+            //         // console.log(response);
+            //         alert("search sucess")
+            //         // method - 2 (Load Method)
+            //         console.log(search);
+            //         alert("after")
+            //         window.history.pushState(null,null,url);
+            //         alert("end")
+            //     },
+            //     error: function (response) {
+            //     }
+            // })
         })
     }
 
     // sort post by title
-    _this.sortPostByTitle = function () {
-        let click = 1;
+    this.sortPostByTitle = function () {
+        
+        let sortOrder = -1;
         $("#btn-sort-title").on("click", function () {
 
-            // odd click
-            if (click % 2 == 1) {
-                // console.log("on");
+            console.log("query ", window.location.search);
+            
+            // toggle click logic
+            sortOrder == -1 ? sortOrder =1 : sortOrder = -1;
+
+            let url = `/?sortBy=title&order=${sortOrder}`;
 
                 $.ajax({
-                    url: `/?sortBy=title&order=1`,
+                    url: url,
                     method: "get",
-                    success: function (responce) {
-                        // console.log(responce);
-                        $(".page-body").load(`/?sortBy=title&order=1 div.page-body`);
+                    success: function (response) {
+                        // console.log(response);
+                        $(".page-body").load(`${url} .page-body`);
+                        window.history.pushState(null, null, url)
                     }
                 });
-            }
-
-            // even click
-            else {
-                // console.log("off");
-
-                $.ajax({
-                    url: `/?sortBy=title&order=-1`,
-                    method: "get",
-                    success: function (responce) {
-                        // console.log(responce);
-                        $(".page-body").load(`/?sortBy=title&order=-1 div.page-body`);
-                    }
-                });
-            };
-            click += 1;
+        
         });
 
     }
 
     // sort post by date time
-    _this.sortPostByDateTime = function () {
-        let click = 1;
+    this.sortPostByDateTime = function () {
+        
+        let sortOrder = -1;
         $("#btn-sort-datetime").on("click", function () {
 
-            // odd click
-            if (click % 2 == 1) {
-                // console.log("on");
+            console.log("query ", window.location.search);
+            
+            // toggle click logic
+            sortOrder == -1 ? sortOrder =1 : sortOrder = -1;
+
+            let url = `/?sortBy=dateTime&order=${sortOrder}`;
 
                 $.ajax({
-                    url: `/?sortBy=dateTime&order=1`,
+                    url: url,
                     method: "get",
-                    success: function (responce) {
-                        // console.log(responce);
-                        $(".page-body").load(`/?sortBy=dateTime&order=1 div.page-body`);
+                    success: function (response) {
+                        // console.log(response);
+                        $(".page-body").load(`${url} .page-body`);
+                        window.history.pushState(null, null, url)
                     }
                 });
-            }
-
-            // even click
-            else {
-                // console.log("off");
-
-                $.ajax({
-                    url: `/?sortBy=dateTime&order=-1`,
-                    method: "get",
-                    success: function (responce) {
-                        // console.log(responce);
-                        $(".page-body").load(`/?sortBy=dateTime&order=-1 div.page-body`);
-                    }
-                });
-            };
-            click += 1;
+        
         });
-
     }
 
     // pagination 
-    _this.pagination = function () {
-        $(document).on("click", ".page-link", function () {
+    this.pagination = function () {
+
+        //  Query String -> Object
+        function queryToObj(queryString) {
+            const pairs = queryString.substring(1).split('&');
+          
+            var array = pairs.map((el) => {
+              const parts = el.split('=');
+              return parts;
+            });
+          
+            return Object.fromEntries(array);
+        }
+
+        $(document).off("click", ".page-link").on("click", ".page-link", function () {
             // $(this).parent().addClass("acitve")
             const page = $(this).attr("data-page-no");
-            // console.log(page);
-
+            const query = window.location.search;   // get query string
+            // console.log("query", query);
+            let url = `/?page=${page}`;
+            const queryObj = queryToObj(window.location.search);    // query -> obj
+            
+            // when query in sort then carry it  
+            if(query.includes("sortBy") || query.includes("filter") || query.includes('search')) {
+                queryObj["page"] = page
+                url = `/?${$.param(queryObj)}`;    // obj -> query
+            }            
+            console.log("url", url);
+            
             $.ajax({
                 method: 'get',
-                url: `/?page=${page}`,
+                url: url,
                 success: function (response) {
-                    $('.page-body').load(`/?page=${page} .page-body`)
+                    $('.page-body').load(`${url} .page-body`,function(){
+                        _this.sortPostByDateTime();
+                    });
+                    $("#total-post").load(`${url} #total-post`)
+                    window.history.pushState(null,null,url);
                 }
             })
         })
     }
-
+    const _this = this;
     _this.init();
 } 
