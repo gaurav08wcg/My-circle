@@ -78,8 +78,14 @@ passport.deserializeUser(function (user, done) {
 router.get("/validate/email", async (req, res, next) => {
   try {
     console.log("req.query", req.query);
+    const condition = { email: req.query.email }
+    
+    // when user edit their profile 
+    if(req.query.userId){
+      condition["_id"] = { $ne : new ObjectId(req.user._id) }
+    }
 
-    const isEmail = await usersModel.findOne({ email: req.query.email }, { email: 1 })
+    const isEmail = await usersModel.findOne(condition, { email: 1 })
 
     // when email is exist 
     if (isEmail) return res.send(false);
@@ -100,17 +106,17 @@ router.get("/", async function (req, res, next) {
     const order = Number(req.query.order);
 
     // pagination variables 
-    const limit = 5;
+    const limit = 3;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
 
     let search = req.query.search;
-    // console.log(req.query.search);
+    // console.log("req.query.search =>",req.query.search);
 
     // if user click on archive
     if (req.query.archive) await postModel.updateOne({ _id: new ObjectId(req.query.postId) }, { isArchived: true })
 
-    // for sorting
+    // for sorting key value
     let sortType = "createdAt";
     let sortOrder = -1;
 
@@ -119,11 +125,7 @@ router.get("/", async function (req, res, next) {
         isArchived: false,
       },
     };
-    // if recive undefined string search in  
-    // if (search) {
-    //   console.log(search);
-    //   search = undefined;
-    // }
+
 
     // if user do filter post
     if (filter) {
@@ -172,7 +174,7 @@ router.get("/", async function (req, res, next) {
 
         // sortType = "title";
         // sortOrder = 1;
-        console.log("pipline sort =>", sortType, sortOrder);
+        console.log("pipeline sort =>", sortType, sortOrder);
       }
 
       // date time
@@ -208,7 +210,6 @@ router.get("/", async function (req, res, next) {
         [sortType]: sortOrder
       }
     });
-
     pipeline.push(
       { $skip: skip },
       { $limit: limit }
@@ -218,22 +219,23 @@ router.get("/", async function (req, res, next) {
     // console.log("pipeline =>", pipeline);
     console.log("allPost =>", allPost);
 
-    // count total post
-    const totalPost = await postModel.find().count();
+    // count of total post
+    const totalPost = await postModel.find({ "isArchived" : false }).count();
 
     // total no of pages
     const pages = [];
     for (let i = 1; i <= Math.ceil(totalPost / limit); i++) {
       pages.push(i);
     }
-
-    console.log("no of poges =>", pages);
+    console.log("no of pages =>", pages);
 
     res.render("index", {
       title: "Home",
       posts: allPost,
       totalPosts: totalPost,
-      pages: pages
+      pages: pages,
+      totalPages: Math.ceil(totalPost / limit),
+      currentPage: page,
     });
   } catch (error) {
     console.log("error => ", error);
