@@ -4,10 +4,11 @@ const savedPostEvent = function () {
 
     _this.init = function () {
         // un-save post event (when Post in landing page) 
-        _this.unSavedEventHandler = new listAllPostEvent();
+        // _this.unSavedEventHandler = new listAllPostEvent();
 
         // un-save post (when post in saved-post page)
         _this.unSavePostButton();
+        _this.paginationFun();
     }
 
     _this.unSavePostButton = function(){
@@ -20,6 +21,24 @@ const savedPostEvent = function () {
                 success: function (response){
                     $(".page-body").load(`/saved-post?postId=${postId}&unSave=true .page-body`);
                     $("#total-post").load(`/saved-post?postId=${postId}&unSave=true #total-post`)
+                }
+            })
+        })
+    }
+
+    _this.paginationFun = function (){
+        $(document).off("click", ".page-link").on("click", ".page-link", function(){
+            const page = $(this).attr("data-page-no");
+            console.log(page);
+            const url = `/saved-post?page=${page}`;
+
+            $.ajax({
+                method:"get",
+                url:url,
+                success: function(response){
+                    $(".page-body").load(`${url} .page-body`);
+                    $('#total-post').load(`${url} #total-post`);
+                    window.history.pushState(null, null, url);
                 }
             })
         })
