@@ -79,10 +79,10 @@ router.get("/validate/email", async (req, res, next) => {
   try {
     console.log("req.query", req.query);
     const condition = { email: req.query.email }
-    
+
     // when user edit their profile 
-    if(req.query.userId){
-      condition["_id"] = { $ne : new ObjectId(req.user._id) }
+    if (req.query.userId) {
+      condition["_id"] = { $ne: new ObjectId(req.user._id) }
     }
 
     const isEmail = await usersModel.findOne(condition, { email: 1 })
@@ -195,6 +195,12 @@ router.get("/", async function (req, res, next) {
         as: "post_with_users",
       },
     });
+
+    // all post without skip limit 
+    const allPostList = await postModel.aggregate(pipeline);
+    // count of total post (without skip limit)
+    const totalPost = allPostList.length
+
     pipeline.push({
       $project: {
         title: 1,
@@ -210,6 +216,7 @@ router.get("/", async function (req, res, next) {
         [sortType]: sortOrder
       }
     });
+
     pipeline.push(
       { $skip: skip },
       { $limit: limit }
@@ -218,9 +225,6 @@ router.get("/", async function (req, res, next) {
     const allPost = await postModel.aggregate(pipeline);
     // console.log("pipeline =>", pipeline);
     console.log("allPost =>", allPost);
-
-    // count of total post
-    const totalPost = await postModel.find({ "isArchived" : false }).count();
 
     // total no of pages
     const pages = [];
