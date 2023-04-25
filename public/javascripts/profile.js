@@ -13,15 +13,16 @@ const profileEvent = function () {
         return this.optional(element) || (element.files[0].size <= param) 
     });
 
+
     $("#edit-profile-form").validate({
         rules: {
           firstName: "required",
           lastName: "required",
           email: {
-            // required: true,
+            required: true,
             email: true,
             remote:{
-              // url:"/validate/email",
+              url:`/validate/email?userId=${$("#edit-btn").attr("data-user-id")}`,
               method:"get"
             }
           },
@@ -40,7 +41,7 @@ const profileEvent = function () {
           email: {
             required: "email is required",
             email: "enter valid email",
-            // remote: "email already existed"
+            remote: "email already existed"
           },
           profilePicture:"File must be JPEG or PNG, less than 5MB" 
         },
