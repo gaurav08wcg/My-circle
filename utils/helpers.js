@@ -12,8 +12,11 @@ const customHelper = {
   moment: function (input) {
     return moment(input).startOf('minute').fromNow();
   },
-  sumByNumber : function (number,sum){
+  sumByNumber: function (number, sum) {
     return number + sum;
+  },
+  arrIndex: function (arr, index) {
+    return arr[index];
   }
 };
 
