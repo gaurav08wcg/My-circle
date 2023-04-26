@@ -10,7 +10,7 @@ const customHelper = {
     console.log(`handlebar logs  => `, data);
   },
   moment: function (input) {
-    return moment(input).startOf('hour').fromNow();
+    return moment(input).startOf('minute').fromNow();
   },
 };
 

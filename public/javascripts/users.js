@@ -4,58 +4,81 @@ const listUsersEvent = function (){
     _this.init = function (){
         _this.sortUser();
         _this.searchUser();
+        _this.pagination();
+    }
+
+    //  Query String -> Object cunverter function
+    function queryToObj(queryString) {
+        const pairs = queryString.substring(1).split('&');
+
+        var array = pairs.map((el) => {
+            const parts = el.split('=');
+            return parts;
+        });
+
+        return Object.fromEntries(array);
     }
 
     // filter & search event
     _this.sortUser = function (){
-        let click = 1;
-        $("#btn-sort-datetime").on("click", function(){
-    
-            // odd click
-            if (click % 2 == 1) {
-                // console.log("on");
+        let sortOrder = -1;
+        $(document).on("click","#btn-sort-datetime", function(){
+            const query = window.location.search;
+            
+            sortOrder  == -1 ? sortOrder=1 : sortOrder=-1;
+            let url = `/users?sortOrder=${sortOrder}`;
 
-                $.ajax({
-                    url: `/users?sortOrder=1`,
-                    method: "get",
-                    success: function (responce) {
-                        // console.log(responce);
-                        $(".page-body").load(`/users?sortOrder=1 div.page-body`);
-                    }
-                });
+            // when searching user and after their sorting
+            if(query.includes("search")){
+                const queryObject = queryToObj(query);      // query string -> object
+                url = `/users?sortOrder=${sortOrder}&search=${queryObject.search}`
             }
 
-            // even click
-            else {
-                // console.log("off");
-
-                $.ajax({
-                    url: `/users?sortOrder=-1`,
-                    method: "get",
-                    success: function (responce) {
-                        // console.log(responce);
-                        $(".page-body").load(`/users?sortOrder=-1 div.page-body`);
-                    }
-                });
-            };
-            click += 1;
+            $(".page-wrapper").load(`${url} div.page-wrapper`, function(){
+                window.history.pushState(null, null, url);
+            });
         })
+
     }
 
     // search event
     _this.searchUser = function (){
-        $("#search-user-btn").on("click", function(){
-            const search = $("#search-user").val();
-            console.log(search);
-            $.ajax({
-                method:"get",
-                url:`/users?search=${search}`,
-                success: function(response){
-                    $('.page-body').load(`/users?search=${search} .page-body`);
-                    $("#total-users").load(`/users?search=${search} #total-users`)
-                }
-            })
+        $(document).on("click","#search-user-btn", function(){
+            
+            // encodeURIComponent convert space -> %20 (for space full string )
+            const search = encodeURIComponent($("#search-user").val());
+            console.log("search", search);
+            let url = `/users?search=${search}`;
+
+            $('.page-wrapper').load(`${url} .page-wrapper`, function(){
+                window.history.pushState(null, null, url);
+            });
         });
+    }
+
+    // pagination event
+    _this.pagination = function(){
+        $(document).off("click", ".page-link").on("click", ".page-link", function () {
+            const page = $(this).attr("data-page-no");
+            const query = window.location.search;   // get query string
+            // console.log("query", query);
+            // console.log("page", page);
+
+            let url = `/users?page=${page}`;
+            const queryObj = queryToObj(window.location.search);    // query -> obj
+
+            // when select page with sort & search
+            if (query.includes("sortBy") || query.includes('search')) {
+                queryObj["page"] = page
+                url = `/users?${$.param(queryObj)}`;    // obj -> query
+            }
+            console.log("url", url);
+
+            $('.page-wrapper').load(`${url} .page-wrapper`, function () {
+                _this.sortUser();
+                window.history.pushState(null, null, url);
+            });
+        })
     }
 
     _this.init();

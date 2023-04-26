@@ -10,7 +10,7 @@
                     </h2>
                     
                     {{!-- total user --}}
-                    <div id="total-users" class="text-muted mt-1">1-18 of {{totalUsers}} Users</div>
+                    <div id="total-users" class="text-muted mt-1">{{currentPage}}-{{totalPages}} of {{totalUsers}} Users</div>
                 </div>
 
                 {{!-- Sorting --}}
@@ -31,13 +31,20 @@
                             <path d="M21 21l-6 -6"></path>
                         </svg>
                     </span>
-                    <input id="search-user" type="text" class="form-control" placeholder="Search…"
-                        aria-label="Search in website">
+                    
+                    {{!-- when search field in value --}}
+                    {{#if search}}
+                        <input id="search-user" type="text" class="form-control" placeholder="Search…"
+                            aria-label="Search in website" value="{{search}}" >
+                    {{else}}
+                        <input id="search-user" type="text" class="form-control" placeholder="Search…"
+                            aria-label="Search in website" value="" >
+                    {{/if}}
                 </div>
 
                 {{!-- search btn --}}
                 <div class="col-1">
-                    <a href="#" id="search-user-btn" class="btn btn-primary w-100">
+                    <a  id="search-user-btn" class="btn btn-primary w-100">
                         Search
                     </a>
                 </div>
@@ -50,6 +57,7 @@
             <!-- Content here -->
 
             {{!-- ========= all users cards grid ======== --}}
+            {{#if usersList}}
             <div class="row row-cards">
                 {{!-- ======== signle user card ======== --}}
                 {{#each usersList}}
@@ -113,38 +121,11 @@
             </div>
 
             {{!-- ======== Pagination ======== --}}
-            <div class="d-flex mt-4">
-                <ul class="pagination ms-auto">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M15 6l-6 6l6 6" />
-                            </svg>
-                            prev
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">
-                            next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M9 6l6 6l-6 6" />
-                            </svg>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            {{>pagination}}
+
+            {{else}}
+                <h1 class="text-center">No User</h1>
+            {{/if}}
 
         </div>
     </div>

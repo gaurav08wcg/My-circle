@@ -7,7 +7,7 @@
                     <h2 class="page-title">
                         Archived post
                     </h2>
-                     <div id="total-post" class="text-muted mt-1">1-18 of {{totalPosts}} Posts</div>
+                     <div id="total-post" class="text-muted mt-1">{{currentPage}}-{{totalPages}} of {{totalPosts}} Posts</div>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
                                 <div class="ms-auto">
 
                                     {{!-- post save icon --}}
-                                    <a id="unarchive-post-btn" data-post-id="{{_id}}" href="#"
+                                    <a id="unarchive-post-btn" data-post-id="{{_id}}" 
                                         class="ms-3 text-muted" data-bs-toggle="tooltip"
                                         data-bs-original-title="unarchive">
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -91,6 +91,9 @@
                 <h3>No post</h3>
                 {{/if}}
             </div>
+
+            {{!-- Pagination --}}
+            {{>pagination}}
         </div>
     </div>
 

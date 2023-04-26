@@ -3,6 +3,19 @@ const archivedPostEvent = function () {
 
     _this.init = function () {
         _this.unarchiveButtonEvent();
+        _this.paginationFun();
+    }
+
+    //  Query String -> Object cunverter function
+    function queryToObj(queryString) {
+        const pairs = queryString.substring(1).split('&');
+
+        var array = pairs.map((el) => {
+            const parts = el.split('=');
+            return parts;
+        });
+
+        return Object.fromEntries(array);
     }
 
     // unarchive post event
@@ -13,17 +26,34 @@ const archivedPostEvent = function () {
             $('.page-wrapper').load(`${url} .page-wrapper`, function () {
                 window.history.pushState(null, null, url)
             });
+        })
+    }
+
+    // pagination
+    _this.paginationFun = function () {
+        $(document).off("click", ".page-link").on("click", ".page-link", function () {
+            const page = $(this).attr("data-page-no");
+            console.log(page);
+            let url = `/archived-post?page=${page}`;
+
+            const queryObj = queryToObj(window.location.search);
+            console.log("queryObj",queryObj);
+
+            $(".page-wrapper").load(`${url} .page-wrapper`, function () {
+                window.history.pushState(null, null, url);
+            });
 
             // $.ajax({
             //     method:"get",
             //     url:url,
             //     success: function(response){
-            //         $('.page-body').load(`${url} .page-body`, function(){ window.history.pushState(null, null, url) });
-            //         $('#total-post').load(`/archived-post?postId=${postId}&archive=false #total-post`)
+            //         $(".page-wrapper").load(`${url} .page-wrapper`, function(){
+            //             window.history.pushState(null, null, url);
+            //         });
+            //         $('#total-post').load(`${url} #total-post`);
             //     }
             // })
         })
     }
-
     _this.init();
 }
