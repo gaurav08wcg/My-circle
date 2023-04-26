@@ -1,5 +1,8 @@
 # node module 
 node_modules
 
-# photots
-public/uploads
+# user photots
+public/uploads/profilePicture
+
+# post's images
+public/uploads/posts

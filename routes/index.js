@@ -4,6 +4,7 @@ const md5 = require("md5");
 const { usersModel } = require("../model/users");
 const { postModel } = require("../model/post");
 const passport = require("passport");
+const { savedPostModel } = require("../model/saved-post");
 const LocalStrategy = require("passport-local").Strategy;
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -198,6 +199,7 @@ router.get("/", async function (req, res, next) {
 
     // all post without skip limit 
     const allPostList = await postModel.aggregate(pipeline);
+    
     // count of total post (without skip limit)
     const totalPost = allPostList.length
 
@@ -223,6 +225,9 @@ router.get("/", async function (req, res, next) {
     )
 
     const allPost = await postModel.aggregate(pipeline);
+     // count of total post (without skip limit)
+    // const totalPost = allPostList.length
+    const savedPostData = await savedPostModel.find();
     // console.log("pipeline =>", pipeline);
     console.log("allPost =>", allPost);
 
@@ -240,6 +245,7 @@ router.get("/", async function (req, res, next) {
       pages: pages,
       totalPages: Math.ceil(totalPost / limit),
       currentPage: page,
+      savedPostData:savedPostData
     });
   } catch (error) {
     console.log("error => ", error);
