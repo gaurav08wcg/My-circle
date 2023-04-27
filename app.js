@@ -12,6 +12,7 @@ var moment = require("moment");
 var handlebarHelpers = require('handlebars-helpers')();  // handlebar helpers
 const customHelper = require("./utils/helpers");  // custom helpers file 
 const commonFun = require("./common/functions");
+const { job } =  require("./cron/cron");    // cronJob
 
 /* Require Route files */
 var indexRouter = require("./routes/index");
