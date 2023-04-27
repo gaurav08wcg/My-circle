@@ -112,7 +112,7 @@
                                         {{#if ../user}}
                                         {{!-- save post --}}
                                         {{#compare postBy._id "!=" ../user._id}}
-                                        <a id="saved-post-btn" href="#" data-post-id="{{_id}}" class="dropdown-item "
+                                        <a id="saved-post-btn" href="#" data-post-id="{{_id}}" data-postBy-id="{{postBy._id}}" class="dropdown-item "
                                             href="#">Save</a>
                                         {{/compare}}
                                         {{/if}}

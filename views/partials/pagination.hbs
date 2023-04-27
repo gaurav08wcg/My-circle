@@ -1,4 +1,5 @@
             {{!-- ======= Pagination ======== --}}
+            {{#compare totalPages ">" "1"}}
             <div class="d-flex">
                 <ul class="pagination ms-auto">
                     {{!-- previous --}}
@@ -15,7 +16,7 @@
                         </a>
                     </li>
                     {{#each pages}}
-                        <li class="page-item"><a class="page-link" href="#" data-page-no="{{this}}">{{this}}</a></li>
+                        <li class="page-item" id="page-no-{{this}}" ><a class="page-link" href="#" data-page-no="{{this}}">{{this}}</a></li>
                     {{/each}}
 
                     {{!-- next --}}
@@ -32,3 +33,4 @@
                     </li>
                 </ul>
             </div>
+            {{/compare}}
