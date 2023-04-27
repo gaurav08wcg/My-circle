@@ -26,14 +26,14 @@ const postSchema = new mongoose.Schema({
         require: true,
         ref: "users"
     },
-    savedBy: [
-        {
-            userId: {
-                type: ObjectId,
-                ref: "users"
-            },
-        }
-    ],
+    // savedBy: [
+    //     {
+    //         userId: {
+    //             type: ObjectId,
+    //             ref: "users"
+    //         },
+    //     }
+    // ],
     postImage: {
         name: {
             type: String
