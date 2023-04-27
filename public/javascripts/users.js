@@ -76,6 +76,7 @@ const listUsersEvent = function (){
 
             $('.page-wrapper').load(`${url} .page-wrapper`, function () {
                 _this.sortUser();
+                $(`#page-no-${page}`).addClass("active");   // selected page no set active
                 window.history.pushState(null, null, url);
             });
         })
