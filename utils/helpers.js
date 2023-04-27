@@ -17,6 +17,13 @@ const customHelper = {
   },
   arrIndex: function (arr, index) {
     return arr[index];
+  },
+  sumOfArrElements: function(array, key){
+    let total =0;
+    for(let element of array){
+      total += parseInt(element[key]);
+    }
+    return total;
   }
 };
 
