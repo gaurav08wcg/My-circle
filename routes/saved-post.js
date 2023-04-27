@@ -102,6 +102,7 @@ router.get('/', async function (req, res, next) {
 router.post("/:id", async (req, res, next) => {
     try {
         console.log("id =>", req.params);
+        const postBy = req.query.postBy;
 
         const alreadySaved = await savedPostModel.findOne({ postId: req.params.id, savedBy: req.user._id });
         console.log("alreadySaved =>", alreadySaved);
@@ -111,7 +112,7 @@ router.post("/:id", async (req, res, next) => {
             return res.send("post unsaved");
         }
 
-        await savedPostModel.create({ postId: req.params.id, savedBy: req.user._id });
+        await savedPostModel.create({ postId: req.params.id, savedBy: req.user._id, postBy : req.query.postBy  });
 
         res.send("post saved");
 
