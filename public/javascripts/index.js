@@ -11,7 +11,7 @@ const listAllPostEvent = function () {
         _this.pagination();
     }
 
-    //  Query String -> Object cunverter function
+    //  Query String -> Object converter function
     function queryToObj(queryString) {
         const pairs = queryString.substring(1).split('&');
 
@@ -51,10 +51,10 @@ const listAllPostEvent = function () {
             // console.log("click");
 
             const postId = $(this).attr("data-post-id");
-
+            const postBy = $(this).attr("data-postBy-id");
             $.ajax({
                 method: "post",
-                url: `saved-post/${postId}`,
+                url: `saved-post/${postId}?postBy=${postBy}`,
                 success: function (response) {
                     console.log("response =>", response);
                     alert(response);
@@ -203,21 +203,11 @@ const listAllPostEvent = function () {
 
             $('.page-body').load(`${url} .page-body`, function () {
                 _this.sortPostByDateTime();
+                _this.sortPostByTitle();                
+                $(`#page-no-${page}`).addClass("active");   // selected page no set active
                 window.history.pushState(null, null, url);
             });
             // $("#total-post").load(`${url} #total-post`);
-
-            // $.ajax({
-            //     method: 'get',
-            //     url: url,
-            //     success: function (response) {
-            //         $('.page-body').load(`${url} .page-body`, function () {
-            //             _this.sortPostByDateTime();
-            //             window.history.pushState(null, null, url);
-            //         });
-            //         $("#total-post").load(`${url} #total-post`);
-            //     }
-            // })
         })
     }
 
