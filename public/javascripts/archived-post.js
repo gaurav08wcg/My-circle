@@ -40,6 +40,7 @@ const archivedPostEvent = function () {
             console.log("queryObj",queryObj);
 
             $(".page-wrapper").load(`${url} .page-wrapper`, function () {
+                $(`#page-no-${page}`).addClass("active");   // selected page no set active
                 window.history.pushState(null, null, url);
             });
 
