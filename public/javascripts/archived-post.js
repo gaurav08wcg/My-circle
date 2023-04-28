@@ -25,6 +25,7 @@ const archivedPostEvent = function () {
             const url = `/archived-post?postId=${postId}&archive=false`;
             $('.page-wrapper').load(`${url} .page-wrapper`, function () {
                 window.history.pushState(null, null, url)
+                // toastr.success('Post unarchive', 'Success',{ timeOut: 1000 });     // unarchive message
             });
         })
     }

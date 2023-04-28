@@ -74,20 +74,8 @@ const listAllPostEvent = function () {
             const url = `/?postId=${postId}&archive=true`;
             $(".page-body").load(`${url} .page-body`, function () {
                 window.history.pushState(null, null, url);
+                // toastr.success('Post Archived','Success', { timeOut: 1000 })
             });
-
-            // $.ajax({
-            //     method: "get",
-            //     url: url,
-            //     success: function (response) {
-            //         $(".page-body").load(`${url} .page-body`, function(){
-            //             window.history.pushState(null, null, url);
-            //         });
-            //     },
-            //     error: function (error) {
-
-            //     }
-            // })
         });
     }
 
