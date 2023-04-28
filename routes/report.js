@@ -6,10 +6,15 @@ const ObjectId = require("mongoose").Types.ObjectId;
 // const { postModel } = require("../model/post");
 // const { savedPostModel } = require("../model/saved-post");
 
-/* Repoart */
+
+/* List Report Data */
 router.get("/", async function (req, res, next) {
   try {
-    const usersReport = await reportModel.find().lean();
+    
+    const search = req.query.search || "";
+    console.log("search", search);
+
+    const usersReport = await reportModel.find({ fullName : { $regex: search , $options: "i" } }).lean();
     console.log("userReport", usersReport);
 
     res.render("report/index", {
@@ -17,6 +22,7 @@ router.get("/", async function (req, res, next) {
       usersReport:usersReport
     });
   } catch (error) {
+    console.log("error =>", error);
     res.render("error", { message: error });
   }
 });
