@@ -12,6 +12,7 @@
                     <div id="total-post" class="text-muted mt-1">{{currentPage}}-{{totalPages}} of {{totalPosts}} Posts</div>
                 </div>
 
+                {{#if user}}
                 {{!-- Sorting --}}
                 {{!-- by title --}}
                 <div class="col-1">
@@ -26,7 +27,6 @@
 
                 {{!-- post Filter Drop down --}}
                 {{!-- if user loged in then show filter post option --}}
-                {{#if user}}
                 <div class="col-2">
                     <select id="post-filter-drop-down" type="text" class="form-select" placeholder="Select a date">
                         <option class="filter-option" value="all">All Post</option>
