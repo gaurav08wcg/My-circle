@@ -10,7 +10,7 @@ const customHelper = {
     console.log(`handlebar logs  => `, data);
   },
   moment: function (input) {
-    return moment(input).startOf('minute').fromNow();
+    return moment(input).format('MMMM Do YYYY, h:mm:ss a');
   },
   sumByNumber: function (number, sum) {
     return number + sum;
