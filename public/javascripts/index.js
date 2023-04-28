@@ -68,14 +68,28 @@ const listAllPostEvent = function () {
 
     // archive post event
     this.archivePostButton = function () {
-        $(document).on("click", "#archive-post-btn", function (e) {
+        
+        $(document).off("click", "#archive-post-btn").on("click", "#archive-post-btn", function (e) {
             e.preventDefault();
+
             const postId = $(this).attr("data-post-id");
-            const url = `/?postId=${postId}&archive=true`;
-            $(".page-body").load(`${url} .page-body`, function () {
-                window.history.pushState(null, null, url);
-                // toastr.success('Post Archived','Success', { timeOut: 1000 })
+
+            $.ajax({
+                method: "put",
+                url: `/post/archive/${postId}`,
+                success: function(response){
+                    console.log(response);
+                    toastr.success(response?.message, response?.type, { timeOut: 1000 });
+                    $(".page-wrapper").load("/ .ajax-res");
+                }
             });
+
+            /* code working but without using put route of post  */ 
+            // const url = `/?postId=${postId}&archive=true`;
+            // $(".page-body").load(`${url} .page-body`, function () {
+            //     window.history.pushState(null, null, url);
+            // });
+            // toastr.success('Post Archived','Success', { timeOut: 1000 })
         });
     }
 
