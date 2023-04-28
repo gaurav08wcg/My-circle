@@ -105,25 +105,48 @@ router.post("/edit/:id", upload.single("postImage"),async (req,res,next) => {
 })
 
 /* archive */
-router.post("/archive/:id", async (req,res,next) =>{
+router.put("/archive/:id", async (req,res,next) =>{
   try {
     console.log(req.params);
 
-    const isArchived = await postModel.findOne({ _id: req.params.id, isArchived: "true" });
+    const isArchived = await postModel.count({ _id: req.params.id, isArchived: true });
     console.log("archived =>", isArchived);
     // if already archive
     if(isArchived){
-      await postModel.updateOne({ _id: req.params.id }, { $set:{ isArchived: "false" } });
-      return res.redirect("/");
+      return res.send({"type" : "success", "message": "already archived"})
+      // await postModel.updateOne({ _id: req.params.id }, { $set:{ isArchived: false } });
+      // return res.redirect("/");
     }
 
     // set archived true
-    await postModel.updateOne({ _id: req.params.id }, { $set:{ isArchived: "true" } });
-    res.redirect("/");
+    await postModel.updateOne({ _id: req.params.id }, { $set:{ isArchived: true } });
+    return res.send({"type" : "success", "message": "post archived"})
+    // res.redirect("/");
 
   } catch (error) {
     res.render("error", { message: error })    
   }
 });
+
+/* unArchive */
+router.put("/unarchive/:id", async (req, res, next) =>{
+  try {
+    
+    // check archived or not
+    const isArchived = await postModel.count({ _id: req.params.id, isArchived: true });
+
+    // if post is not archive then send message
+    if(!isArchived){
+      return res.send({"type":"success", "message": "this post is not archived"})
+    }
+
+    // unarchive post
+    await postModel.updateOne({ _id: req.params.id }, { $set:{ isArchived: false } });    
+    return res.send({"type" : "success", "message": "post unarchive"})
+
+  } catch (error) {
+    res.render("error", { error : error })
+  }
+}); 
 
 module.exports = router;
