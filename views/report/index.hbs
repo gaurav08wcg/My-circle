@@ -89,8 +89,9 @@
                   <div class="col-auto">
                     <span
                       class="bg-twitter text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24" height="24"
-                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24"
+                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
                         <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
@@ -112,63 +113,39 @@
             </div>
           </div>
 
-          {{!-- <div class="col-sm-6 col-lg-3">
-            <div class="card card-sm">
-              <div class="card-body">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <span
-                      class="bg-facebook text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path>
-                      </svg>
-                    </span>
-                  </div>
-                  <div class="col">
-                    <div class="font-weight-medium">
-                      132 Likes
-                    </div>
-                    <div class="text-muted">
-                      21 today
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> --}}
         </div>
       </div>
 
       {{!-- ========== user's details table ======== --}}
-      <div class="card">
+      <div class="card" id="user-statistic-card">
 
         <div class="card-header">
-            {{!-- user Table title --}}
-            <div class="col-8">
-              <h3 class="card-title h2">
-                <b>User's Statistics</b>
-              </h3>
-            </div>
+          {{!-- user Table title --}}
+          <div class="col-8">
+            <h3 class="card-title h2">
+              <b>User's Statistics</b>
+            </h3>
+          </div>
 
-            {{!-- User Search box --}}
-            <div class="input-icon col-3">
-                    <span class="input-icon-addon">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/search -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                            <path d="M21 21l-6 -6"></path>
-                        </svg>
-                    </span>
-                    <input id="search-user-field" name="searchUser" type="text" class="form-control" placeholder="Search User…" aria-label="Search in websitse">
-            </div>
+          {{!-- User Search box --}}
+          <div class="input-icon col-3">
+            <span class="input-icon-addon">
+              <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                <path d="M21 21l-6 -6"></path>
+              </svg>
+            </span>
+            <input id="search-user-field" name="searchUser" type="text" class="form-control" placeholder="Search User…"
+              aria-label="Search in websitse">
+          </div>
         </div>
 
         {{!-- ======= card body ===== --}}
-        <div class="card-body">
+        <div class="card-body" id="user-table-card-body">
+          {{#if usersReport}}
           <div id="table-default" class="table-responsive">
 
             {{!-- table --}}
@@ -186,9 +163,8 @@
               </thead>
 
               {{!-- table description --}}
-              {{#log usersReport}}{{/log}}
+              {{!-- {{#log usersReport}}{{/log}} --}}
               <tbody class="table-tbody">
-                {{#if usersReport}}
                 {{#each usersReport}}
                 <tr>
                   <td class="sort-name h4"> {{#sumByNumber @index 1}}{{/sumByNumber}}</td>
@@ -198,20 +174,22 @@
                   <td class="sort-score h4">{{totalSavedByOther}}</td>
                 </tr>
                 {{/each}}
-                {{/if}}
               </tbody>
             </table>
           </div>
+          {{else}}
+          <h1 class="text-center">User Not Found</h1>
+          {{/if}}
         </div>
       </div>
 
     </div>
   </div>
 
-{{!-- Event File --}}
-{{#section "script"}}
-<script src="./javascripts/report.js"></script>
-<script>
-  new reportEvent();
-</script>
-{{/section}}
+  {{!-- Event File --}}
+  {{#section "script"}}
+  <script src="./javascripts/report.js"></script>
+  <script>
+    new reportEvent();
+  </script>
+  {{/section}}
