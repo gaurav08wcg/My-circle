@@ -16,6 +16,7 @@ const savedPostEvent = function () {
             const postId = $(this).attr("data-post-id");
             const url = `/saved-post?postId=${postId}&unSave=true`;
             $(".page-wrapper").load(`${url} .page-wrapper`);
+            toastr.success('Post unsaved', 'Success', { timeOut: 1000 });
 
             // $.ajax({
             //     method: "get",
