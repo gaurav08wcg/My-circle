@@ -9,6 +9,7 @@ const listAllPostEvent = function () {
         _this.sortPostByTitle();
         _this.sortPostByDateTime();
         _this.pagination();
+        _this.resetButton();
     }
 
     //  Query String -> Object converter function
@@ -57,7 +58,8 @@ const listAllPostEvent = function () {
                 url: `saved-post/${postId}?postBy=${postBy}`,
                 success: function (response) {
                     console.log("response =>", response);
-                    alert(response);
+                    toastr.success(response, "Success", { timeOut: 1000 });
+                    // alert(response);
                 },
                 error: function (error) {
                     $(".page-body").html(error);
@@ -210,6 +212,20 @@ const listAllPostEvent = function () {
                 window.history.pushState(null, null, url);
             });
             // $("#total-post").load(`${url} #total-post`);
+        })
+    }
+
+    // reset all filter & search btn 
+    this.resetButton = function (){
+        
+        $(document).on("click", "#reset-btn", function(){
+            const queryObj = queryToObj(window.location.search);
+            let url = `/`;
+            // console.log("reset url",url);
+
+            $("#timeline-page-content").load(`${url} #timeline-page-content`, function(){
+                window.history.pushState(null,null,url);
+            });
         })
     }
 
