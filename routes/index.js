@@ -113,7 +113,7 @@ router.get("/", async function (req, res, next) {
     const order = Number(req.query.order);
 
     // pagination variables 
-    const limit = 3;
+    const limit = 5;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
 
@@ -274,8 +274,10 @@ router.post("/signup", async (req, res, next) => {
     const bodyData = req.body;
     bodyData["password"] = md5(req.body.password);
     await usersModel.create(bodyData);
+    req.flash('message', `Sign up successfully, ${bodyData.firstName}`);
+    req.flash('className','success');
     res.redirect("/signin");
-  } catch {
+  } catch (error) {
     res.redirect("/signin");
   }
 });
@@ -283,7 +285,7 @@ router.post("/signup", async (req, res, next) => {
 /* Sign in */
 router.get("/signin", (req, res, next) => {
   try {
-    res.render("signin/index", { layout: "auth", title: "sign in" });
+    res.render("signin/index", { layout: "auth", title: "sign in" ,className:req.flash('className'), message: req.flash('message') });
   } catch (error) {
     console.log("error =>", error);
     res.render("error", { message: error });
@@ -298,11 +300,13 @@ router.post("/signin", async (req, res, next) => {
       // error
       if (err) {
         console.log("err =>", err);
+        req.flash('message', `${err}`);
         return next(err);
       }
       // user not found
       if (!user) {
         console.log("-------- user not found ---------");
+        req.flash('message', 'Please enter valid Credentials');
         return res.redirect("/signin");
       }
       // user found successfully
@@ -310,9 +314,9 @@ router.post("/signin", async (req, res, next) => {
         if (err) return next(err);
 
         console.log("-----login success------");
-
+        req.flash('message', 'Login Successfully...');
+        
         // store user details in locals
-
         console.log("locals =>", res.locals.user);
         res.redirect("/");
         console.log("user => ", req.user);

@@ -7,7 +7,7 @@ router.get('/', async function (req, res, next) {
   try {
 
     // pagination variables 
-    const limit = 3;
+    const limit = 4;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
   

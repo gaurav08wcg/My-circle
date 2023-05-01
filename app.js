@@ -1,29 +1,28 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const createError = require("http-errors");
+const path = require("path");
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 const session = require("express-session");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
-var flash = require('connect-flash');
-var moment = require("moment");
+const  flash = require('connect-flash');
 
-var handlebarHelpers = require('handlebars-helpers')();  // handlebar helpers
+const handlebarHelpers = require('handlebars-helpers')();  // handlebar helpers
 const customHelper = require("./utils/helpers");  // custom helpers file 
 const commonFun = require("./common/functions");
 const { job } =  require("./cron/cron");    // cronJob
 
 /* Require Route files */
-var indexRouter = require("./routes/index");
-var profileRouter = require("./routes/profile");
-var postRouter = require("./routes/post");
-var savedPostRouter = require("./routes/saved-post");
-var usersRouter = require("./routes/users");
-var reportRouter = require("./routes/report");
-var archivedPostRouter = require("./routes/archived-post");
+const indexRouter = require("./routes/index");
+const profileRouter = require("./routes/profile");
+const postRouter = require("./routes/post");
+const savedPostRouter = require("./routes/saved-post");
+const usersRouter = require("./routes/users");
+const reportRouter = require("./routes/report");
+const archivedPostRouter = require("./routes/archived-post");
 
-var app = express();
+const app = express();
 
 /* ========= Handlebar setup ============ */
 const exphbs = require("express-handlebars");

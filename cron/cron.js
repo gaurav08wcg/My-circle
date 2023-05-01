@@ -24,7 +24,7 @@ const job = new CroneJob(
             userDetails["totalCreatedPost"] = await postModel.count({ postBy: user._id, isArchived : false });
             userDetails["totalSavedPost"] = await savedPostModel.count({savedBy: user._id});
             userDetails["totalSavedByOther"] = await savedPostModel.count({postBy: user._id});
-            console.log("userDetails =>", userDetails); 
+            // console.log("userDetails =>", userDetails); 
             
             // if new user add then insert other wise update 
             await reportModel.updateOne(
