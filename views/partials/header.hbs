@@ -5,7 +5,7 @@
     {{!-- App Logo --}}
     <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
       <a href="/">
-        <img src="./images/my-circle-logo.png" width="80" height="80" alt="My Circle logo" class="navbar-brand-image">
+        <img src="/images/my-circle-logo.png" width="80" height="80" alt="My Circle logo" class="navbar-brand-image">
       </a>
     </h1>
 
@@ -281,10 +281,10 @@
 
           {{#if user.profilePicture}}
           <span class="avatar avatar-sm">
-            <img src="./uploads/profilePicture/{{user.profilePicture.name}}" alt="user-avatar">
+            <img src="/uploads/profilePicture/{{user.profilePicture.name}}" alt="user-avatar">
           </span>
           {{else}}
-          <span class="avatar avatar-sm" style="background-image: url(./images/avatar.png)"></span>
+          <span class="avatar avatar-sm" style="background-image: url(/images/avatar.png)"></span>
           {{/if}}
           <div class="d-none d-xl-block ps-2">
             <div id="user-name">{{user.firstName}} {{user.lastName}}</div>

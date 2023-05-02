@@ -10,6 +10,8 @@ const listAllPostEvent = function () {
         _this.sortPostByDateTime();
         _this.pagination();
         _this.resetButton();
+        _this.flashMessage();
+        // _this.viewPostBtn();
     }
 
     //  Query String -> Object converter function
@@ -228,6 +230,23 @@ const listAllPostEvent = function () {
             });
         })
     }
+
+    // show flash message (sign up successfully)
+    this.flashMessage = function (){
+        setTimeout(() => { 
+            $(".flash-msg").empty()
+        },4000)
+    }
+
+    // view particular post (not use)
+    // this.viewPostBtn = function (){
+    //     $(document).on("click", "#view-post-btn", function () {
+    //         const url = `/post/view/${$(this).attr("data-post-id")}`;
+    //         $("#timeline-page-content").load(`${url} #view-post`, function(){
+    //             window.history.pushState(null,null,url);
+    //         })
+    //     })
+    // }
 
     const _this = this;
     _this.init();

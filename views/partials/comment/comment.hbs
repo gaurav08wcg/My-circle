@@ -1,0 +1,45 @@
+<div class="col-lg-12" id="comment-section">
+    <div class="card">
+        {{! card header }}
+        <div class="card-header h2">Comments</div>
+
+        {{! card body }}
+        <div class="card-body">
+            <div class="row row-0">
+
+                {{!-- user can comment only own post other vise user can save the post --}}
+                {{!-- {{#compare postDetails.postBy '==' user._id}} --}}
+                {{#if user}}
+
+                    {{#or postOwner  postSaved}}
+                        <form id="add-comment-form" class="row">
+                            {{! Add comment }}
+                            <div class="mb-3 col-8">
+                                <label class="form-label h4">Add Comment <span class="form-label-description">56/100</span></label>
+                                <textarea id="comment-field" class="form-control" name="commentText" rows="2"
+                                    placeholder="Write comment message.."></textarea>
+                            </div>
+
+                            {{!-- comment btn --}}
+                            <div class="col-2 m-4">
+                                <button id="comment-btn" data-post-id="{{postDetails._id}}" data-user-id="{{user._id}}" type="submit" class="btn btn-primary w-100">
+                                    Add comment
+                                </button>
+                            </div>
+                        </form>
+                    {{/or}} 
+                
+                {{/if}}
+                {{!-- {{/compare}} --}}
+
+                {{!-- list of comments  --}}
+                <div class="col-md-6 col-lg-12 ">
+                    {{!-- single comment block --}}
+                    {{>comment/single-comment}}
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</div>

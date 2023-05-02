@@ -251,7 +251,9 @@ router.get("/", async function (req, res, next) {
       pages: pages,
       totalPages: Math.ceil(totalPost / limit),
       currentPage: page,
-      savedPostData:savedPostData
+      savedPostData:savedPostData,
+      message : req.flash('message'),
+      className: 'success'
     });
   } catch (error) {
     console.log("error => ", error);
