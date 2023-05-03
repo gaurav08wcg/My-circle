@@ -1,85 +1,19 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const md5 = require("md5");
+const passport = require("passport");
+const ObjectId = require("mongoose").Types.ObjectId;
+// const LocalStrategy = require("passport-local").Strategy;
+
+const auth = require("../auth");
 const { usersModel } = require("../model/users");
 const { postModel } = require("../model/post");
-const passport = require("passport");
 const { savedPostModel } = require("../model/saved-post");
-// const LocalStrategy = require("passport-local").Strategy;
-const ObjectId = require("mongoose").Types.ObjectId;
-const auth = require("../auth");
 
 /* --------- passport authentication configuration ----------  */
 auth.localStrategyInitialization();
 auth.serializeUser();
 auth.deserializeUser();
-
-/* ====== Local strategy define ====== */
-// passport.use(
-//   new LocalStrategy(
-//     {
-//       usernameField: "email",
-//       passwordField: "password",
-//       passReqToCallback: true,
-//     },
-//     async function (req, email, password, done) {
-//       console.log("----------- find user ---------");
-//       usersModel
-//         .findOne({
-//           email: {
-//             $regex: "^" + email + "$",
-//             $options: "i",
-//           },
-//           password: md5(password),
-//         })
-//         .then((user) => {
-//           console.log("-------- inside .then() ---------");
-//           console.log("user =>", user);
-//           // user not found
-//           if (!user) {
-//             console.log("-------- user not found ---------");
-//             return done(null, false, {
-//               message: "Please enter valid login details",
-//             });
-//           }
-//           // user found
-//           else {
-//             console.log(
-//               "======================/* user successfully founded */======================"
-//             );
-//             console.log("user =>", user);
-//             return done(null, user);
-//           }
-//         })
-//         // handle catch
-//         .catch(function (err) {
-//           console.log("err =>", err);
-//           return done(null, false, {
-//             message: "Please enter valid login details",
-//           });
-//         });
-//     }
-//   )
-// );
-
-/* =========== serialize user ===========*/
-// passport.serializeUser(function (user, done) {
-//   console.log("--------------serializeUser-------------");
-//   // console.log("user =>", user)
-//   done(null, user);
-// });
-
-/* =========== deserialize user ===========*/
-// passport.deserializeUser(function (user, done) {
-//   try {
-//     console.log("--------------deserializeUser--------------");
-//     const userDetail = user;
-//     // console.log("user =>", user)
-//     done(null, userDetail);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 
 /* email validation */
 router.get("/validate/email", async (req, res, next) => {
@@ -194,21 +128,68 @@ router.get("/", async function (req, res, next) {
     const pipeline = [];
 
     pipeline.push(match);
+    // pipeline.push({
+    //   $lookup: {
+    //     from: "users",
+    //     localField: "postBy",
+    //     foreignField: "_id",
+    //     as: "post_with_users",
+    //   },
+    // });
+
+    /* lookup with user */
     pipeline.push({
       $lookup: {
         from: "users",
-        localField: "postBy",
-        foreignField: "_id",
-        as: "post_with_users",
+        let: { postBy: "$postBy" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$_id", "$$postBy"],
+              },
+            },
+          },
+          {
+            $project: {
+              firstName: 1,
+              lastName: 1,
+              createdAt: 1,
+              profilePicture: "$profilePicture.name",
+            },
+          },
+        ],
+        as: "postOwner",
       },
     });
 
-    // all post without skip limit 
+    /* lookup with comments */
+    pipeline.push({
+      $lookup: {
+        from: "comments",
+        let: { id: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$$id", "$postId"],
+              },
+            },
+          },
+          {
+            $group: { _id: null, total: { $sum: 1 } },
+          },
+        ],
+        as: "comments",
+      },
+    });
+
+    // --------- all post without skip limit --------------- 
     const allPostList = await postModel.aggregate(pipeline);
-    
     // count of total post (without skip limit)
     const totalPost = allPostList.length
 
+    /* =========== new projection ============ */
     pipeline.push({
       $project: {
         title: 1,
@@ -217,8 +198,21 @@ router.get("/", async function (req, res, next) {
         postBy: { $first: "$post_with_users" },
         postImage: "$postImage.name",
         createdAt: 1,
+        postBy: { $arrayElemAt: ["$postOwner", 0] },
+        totalComments: { $arrayElemAt: ["$comments.total", 0] },
       },
     });
+
+    // pipeline.push({
+    //   $project: {
+    //     title: 1,
+    //     description: 1,
+    //     postBy: 1,
+    //     postBy: { $first: "$post_with_users" },
+    //     postImage: "$postImage.name",
+    //     createdAt: 1,
+    //   },
+    // });
     pipeline.push({
       $sort: {
         [sortType]: sortOrder

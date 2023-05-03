@@ -22,12 +22,35 @@ try {
         }
     };
     pipeline.push(match);
+
+    /* user lookup */
     pipeline.push({
       $lookup: {
         from: "users",
         localField: "postBy",
         foreignField: "_id",
         as: "post_with_users",
+      },
+    });
+
+    /* comment lookup */
+    pipeline.push({
+      $lookup: {
+        from: "comments",
+        let: { postId: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$postId", "$$postId"],
+              },
+            },
+          },
+          {
+            $group: { _id: null, total: { $sum: 1 } },
+          },
+        ],
+        as: "comments",
       },
     });
 
@@ -43,6 +66,7 @@ try {
         postBy: { $first: "$post_with_users" },
         postImage: "$postImage.name",
         createdAt: 1,
+        totalComments: { $arrayElemAt : [ "$comments.total", 0] }
       },
     });
     pipeline.push({
