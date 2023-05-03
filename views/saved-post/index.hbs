@@ -8,7 +8,8 @@
                         saved post
                     </h2>
 
-                    <div id="total-post" class="text-muted mt-1">{{currentPage}}-{{totalPages}} of {{totalPosts}} Posts</div>
+                    <div id="total-post" class="text-muted mt-1">{{currentPage}}-{{totalPages}} of {{totalPosts}} Posts
+                    </div>
                 </div>
             </div>
         </div>
@@ -34,66 +35,88 @@
 
                         {{!-- post image --}}
                         <a href="#" class="d-block">
-                            <img src="/uploads/posts/{{postDetails.postImage.name}}" class="card-img-top" width="420" height="236">
+                            <img src="/uploads/posts/{{postDetails.postImage}}" class="card-img-top" width="420"
+                                height="236">
                         </a>
                         <div class="card-body">
 
                             {{!-- post description --}}
                             <div class="description pb-4 ">
-                                {{postDetails.description}}
-                            </div>
-                            <div class="d-flex align-items-center">
+                                {{!-- when description > 50 --}}
+                                {{#compare (stringLength postDetails.description) '>' '50'}}
+                                {{#stringSlicing postDetails.description}}{{/stringSlicing}}
+                                {{/compare}}
 
-                                {{!-- post's user profile --}}
-                                {{!-- <span class="avatar me-3 rounded"
-                                    style="background-image: url(./static/avatars/000m.jpg)"></span> --}}
+                                {{!-- when description < 50 --}} {{#compare (stringLength
+                                    postDetails.description) '<' '50' }} {{postDetails.description}} {{/compare}} </div>
+                                    <div class="d-flex align-items-center">
 
-                                {{!-- user's name --}}
-                                <div>
-                                    <div><b>{{posted_user_info.firstName}}
-                                            {{posted_user_info.lastName}}</b> </div>
-                                    {{!-- <div class="text-muted">3 days ago</div> --}}
-                                </div>
+                                        {{!-- post's user profile --}}
+                                        {{#if postBy.profilePicture}}
+                                        <img class="avatar me-3 rounded "
+                                            src="/uploads/profilePicture/{{postBy.profilePicture}}" alt="user-avatar" />
+                                        {{else}}
+                                        <img class="avatar me-3 rounded " src="/images/avatar.png" alt="user-avatar" />
+                                        {{/if}}
 
-                                <div class="ms-auto">
+                                        {{!-- user's name --}}
+                                        <div>
+                                            <div><b>{{postBy.firstName}}
+                                                    {{postBy.lastName}}</b> </div>
 
-                                    {{!-- post Un save icon --}}
-                                    <a id="unsave-post-btn" data-post-id="{{postDetails._id}}" href="#"
-                                        class="ms-3 text-muted" data-bs-toggle="tooltip"
-                                        data-bs-original-title="unsave">
-                                        <svg xmlns="http://www.w3.org/2000/svg" id="Filled" viewBox="0 0 24 24"
-                                            width="24" height="24">
-                                            <path
-                                                d="M2.849,23.55a2.954,2.954,0,0,0,3.266-.644L12,17.053l5.885,5.853a2.956,2.956,0,0,0,2.1.881,3.05,3.05,0,0,0,1.17-.237A2.953,2.953,0,0,0,23,20.779V5a5.006,5.006,0,0,0-5-5H6A5.006,5.006,0,0,0,1,5V20.779A2.953,2.953,0,0,0,2.849,23.55Z" />
-                                        </svg>
-                                    </a>
+                                            {{!-- post create date --}}
+                                            <div class="text-muted">{{moment postDetails.createdAt}}</div>
+                                        </div>
 
-                                </div>
+                                        <div class="ms-auto">
 
+                                            {{!-- show total comments count--}}
+                                            <i class="fa-regular fa-comment"></i>
+                                            <span class="ms-2">
+                                                {{#if totalComments}}
+                                                {{totalComments}}
+                                                {{else}}
+                                                0
+                                                {{/if}}
+                                            </span>
+
+                                            {{!-- post Un save icon --}}
+                                            <a id="unsave-post-btn" data-post-id="{{postDetails._id}}" href="#"
+                                                class="ms-3 text-muted" data-bs-toggle="tooltip"
+                                                data-bs-original-title="unsave">
+                                                <svg xmlns="http://www.w3.org/2000/svg" id="Filled" viewBox="0 0 24 24"
+                                                    width="24" height="24">
+                                                    <path
+                                                        d="M2.849,23.55a2.954,2.954,0,0,0,3.266-.644L12,17.053l5.885,5.853a2.956,2.956,0,0,0,2.1.881,3.05,3.05,0,0,0,1.17-.237A2.953,2.953,0,0,0,23,20.779V5a5.006,5.006,0,0,0-5-5H6A5.006,5.006,0,0,0,1,5V20.779A2.953,2.953,0,0,0,2.849,23.55Z" />
+                                                </svg>
+                                            </a>
+
+                                        </div>
+
+                                    </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {{/each}}
-                {{else}}
+                    {{/each}}
+                    {{else}}
                     <h1 class="text-center">No post</h1>
-                {{/if}}
+                    {{/if}}
+                </div>
+
+                {{!-- ======= Pagination ======== --}}
+                {{>pagination}}
             </div>
-
-            {{!-- ======= Pagination ======== --}}
-            {{>pagination}}
         </div>
-    </div>
 
-    {{!-- Event file --}}
-    {{#section "script"}}
-    <script src="./javascripts/saved-post.js"></script>
-    <script src="./javascripts/index.js"></script>
+        {{!-- Event file --}}
+        {{#section "script"}}
+        <script src="./javascripts/saved-post.js"></script>
+        <script src="./javascripts/index.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            new savedPostEvent();
-        })
-    </script>
+        <script>
+            $(document).ready(function () {
+                new savedPostEvent();
+            })
+        </script>
 
-    {{/section}}
+        {{/section}}

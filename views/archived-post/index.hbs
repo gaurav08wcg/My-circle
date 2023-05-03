@@ -40,7 +40,15 @@
 
                             {{!-- post description --}}
                             <div class="description pb-4 ">
-                                {{description}}
+                                {{!-- when description > 50 --}}
+                                {{#compare (stringLength description) '>' '50'}}
+                                    {{#stringSlicing description}}{{/stringSlicing}}
+                                {{/compare}}
+                                
+                                {{!-- when description < 50 --}}
+                                {{#compare (stringLength description) '<' '50'}}
+                                    {{description}}
+                                {{/compare}}
                             </div>
                             <div class="d-flex align-items-center">
 
@@ -62,6 +70,16 @@
                                 </div>
 
                                 <div class="ms-auto">
+
+                                    {{!-- show total comments count--}}
+                                    <i class="fa-regular fa-comment"></i>
+                                    <span class="ms-2">
+                                        {{#if totalComments}}
+                                        {{totalComments}}
+                                        {{else}}
+                                            0
+                                        {{/if}}
+                                    </span>
 
                                     {{!-- post save icon --}}
                                     <a id="unarchive-post-btn" data-post-id="{{_id}}" 

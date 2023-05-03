@@ -90,6 +90,7 @@
             <div class="row row-cards">
                 {{#if posts}}
                 {{#each posts}}
+
                 {{!-- ======= single post card ======= --}}
                 <div class="col-sm-6 col-lg-4">
                     <div class="card card-sm">
@@ -152,14 +153,23 @@
 
                             {{!-- post description --}}
                             <div class="description pb-4 ">
-                                {{description}}
+                                {{!-- when description > 50 --}}
+                                {{#compare (stringLength description) '>' '50'}}
+                                    {{#stringSlicing description}}{{/stringSlicing}}
+                                {{/compare}}
+                                
+                                {{!-- when description < 50 --}}
+                                {{#compare (stringLength description) '<' '50'}}
+                                    {{description}}
+                                {{/compare}}
+
                             </div>
                             <div class="d-flex align-items-center">
 
                                 {{!-- post's user profile --}}
-                                {{#if postBy.profilePicture.name}}
+                                {{#if postBy.profilePicture}}
                                 <img class="avatar me-3 rounded "
-                                    src="./uploads/profilePicture/{{postBy.profilePicture.name}}" alt="user-avatar" />
+                                    src="./uploads/profilePicture/{{postBy.profilePicture}}" alt="user-avatar" />
                                 {{else}}
                                 <img class="avatar me-3 rounded " src="./images/avatar.png" alt="user-avatar" />
                                 {{/if}}
@@ -170,11 +180,24 @@
 
                                     {{!-- post Create Date --}}
                                     <div class="text-muted">{{moment createdAt}}</div>
-                                </div>
+                                </div>                                    
+                                
 
-                                {{!-- view post btn --}}
+                                {{!-- Buttons --}}
                                 <div class="ms-auto">
-                                    <a href="/post/view/{{_id}}" class="text-muted" id="view-post-btn" >
+
+                                    {{!-- show total comments count--}}
+                                   <i class="fa-regular fa-comment"></i>
+                                    <span class="ms-2">
+                                        {{#if totalComments}}
+                                            {{totalComments}}
+                                        {{else}}
+                                            0
+                                        {{/if}}
+                                    </span>
+
+                                    {{!-- view post btn --}}
+                                    <a href="/post/view/{{_id}}" class="text-muted ms-3" id="view-post-btn" >
                                         <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                             stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -191,7 +214,7 @@
                     </div>
                 </div>
                 {{/each}}
-            </div>
+                </div>
 
             {{!-- ========= Edit Post Modal ========== --}}
             <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
