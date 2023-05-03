@@ -281,10 +281,22 @@ try {
 /* add comment in post */
 router.post("/add-comment/:postId", async (req,res,next) => {
   try {
+    // find the post
+    const findPost = await postModel.count({_id: req.params.postId, isArchived: false})
+
+    // when post not found then show error
+    if(!findPost){
+      return res.send({
+        type: "error",
+        message: "Post is not found"
+      });
+    }
+
     const bodyData = req.body;
     bodyData["commentBy"] = req.user._id;
     bodyData["postId"] = req.params.postId
-    
+  
+    // add comment
     await commentModel.create(bodyData);
     res.send({
       type: "success",
@@ -292,6 +304,32 @@ router.post("/add-comment/:postId", async (req,res,next) => {
     });
   } catch (error) {
     res.render("error", { message : error })
+  }
+})
+
+/* delete comment from the post  */
+router.post("/delete-comment/:commentId", async (req,res,next)=>{
+  try {
+    // console.log("commentId", req.params);
+    const findComment = await commentModel.count({_id: req.params.commentId});
+    
+    // when comment not found then show error
+    if(!findComment){
+      return res.send({
+        type:"error",
+        message: "Comment not found"
+      })
+    }
+
+    // delete comment 
+    await commentModel.deleteOne({_id: req.params.commentId});
+
+    res.send({
+      type:"success",
+      message: "Comment deleted"
+    })
+  } catch (error) {
+    res.render("error", { message: error });
   }
 })
 
