@@ -45,7 +45,7 @@ const createPostEvent = function (){
                 postImage:{
                     required: "Image is required",
                     accept: "allow only .jepg, .png, .gif format",
-                    filesize: "Select image less then 2MB"
+                    filesize: "Select image less then 3MB"
                 }
             }     
        })
