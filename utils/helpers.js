@@ -1,4 +1,5 @@
 var moment = require("moment");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const customHelper = {
   section: function (name, options) {
@@ -10,7 +11,7 @@ const customHelper = {
     console.log(`handlebar logs  => `, data);
   },
   moment: function (input) {
-    return moment(input).format('MMMM Do YYYY, h:mm:ss a');
+    return moment(input).fromNow();
   },
   sumByNumber: function (number, sum) {
     return number + sum;
@@ -24,6 +25,15 @@ const customHelper = {
       total += parseInt(element[key]);
     }
     return total;
+  },
+  stringSlicing : function(string){
+    return string.slice(0,57) + "...";
+  },
+  stringLength : function(string){
+    return string.length;
+  },
+  ObjectId: function(id){
+    return new ObjectId(id);
   }
 };
 
