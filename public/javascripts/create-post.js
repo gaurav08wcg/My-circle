@@ -29,8 +29,8 @@ const createPostEvent = function (){
                 },
                 postImage:{
                     required: true,
-                    // accept: "image/jpeg,image/png,image/gif",
-                    filesize: 2097152
+                    accept: "image/jpeg,image/png,image/gif",
+                    filesize: 3097152
                 }
             },
             messages:{
@@ -44,7 +44,7 @@ const createPostEvent = function (){
                 },
                 postImage:{
                     required: "Image is required",
-                    // accept: "allow only .jepg, .png, .gif format",
+                    accept: "allow only .jepg, .png, .gif format",
                     filesize: "Select image less then 2MB"
                 }
             }     

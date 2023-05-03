@@ -15,7 +15,14 @@
                         <form id="add-comment-form" class="row">
                             {{! Add comment }}
                             <div class="mb-3 col-8">
-                                <label class="form-label h4">Add Comment <span class="form-label-description">56/100</span></label>
+                                <label class="form-label h4" id="commen-label">Add Comment 
+                                    <span class="form-label-description">
+                                        100/
+                                        <span class="form-label-description" id="characters">
+                                            0
+                                        </span>
+                                    </span>
+                                </label>
                                 <textarea id="comment-field" class="form-control" name="commentText" rows="2"
                                     placeholder="Write comment message.."></textarea>
                             </div>

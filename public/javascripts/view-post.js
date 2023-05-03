@@ -2,6 +2,18 @@ const viewPostEvent = function () {
   this.init = function () {
     _this.commentAddBtn();
     _this.commentDeleteBtn();
+    _this.countCharacter();
+  };
+
+
+  // count commented character length
+  this.countCharacter = function () {
+    $("#comment-field").on("input", function () {
+      let Characters =  $("#characters").text($("#comment-field").val().split(" ").join("").length);
+      $("#comment-label").load(`/post/view/${postId} #comment-label`, function(){
+        $("#characters").text(Characters);
+      });
+    });
   };
 
   // comment add event
@@ -34,6 +46,7 @@ const viewPostEvent = function () {
             if (response.type == "success") {
               toastr.success(response.message, { timeOut: 500 });
               $("#comment-field").val("");
+              $("#characters").text("0")
               $("#comment-container").load(
                 `${loadUrl} #comment-container`,
                 function () {
