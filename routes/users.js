@@ -7,7 +7,7 @@ router.get('/', async function (req, res, next) {
   try {
 
     // pagination variables 
-    const limit = 3;
+    const limit = 4;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
   
@@ -60,8 +60,17 @@ router.get('/', async function (req, res, next) {
       {
         $lookup: {
           from: "posts",
-          localField: "_id",
-          foreignField: "postBy",
+          let: { userId: "$_id" },
+          pipeline:[
+            {
+                $match: {
+                    $expr: {
+                         $eq: ["$$userId", "$postBy"] 
+                    },
+                    "isArchived" : false,
+                }
+            }
+          ],
           as: "createPost"
         }
       }

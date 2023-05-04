@@ -1,0 +1,37 @@
+<div id="comment-container">
+{{#if postDetails.comments}}
+{{#each postDetails.comments}}
+{{!-- single comment block --}}
+
+<div class="card card-borderless border m-2">
+    <div class="card-body">
+        <h3 class="card-title">
+
+            {{!-- comment by (user) --}}
+            <b class="h3">{{commentedUser.firstName}} {{commentedUser.lastName}}</b>
+
+            {{!-- comment time --}}
+            <span class="comment-time text-muted h4 pr-3">
+                {{moment createdAt}}
+            </span>
+
+            {{!-- delete comment icon  (Show Only postOwner & commented user)--}}
+            {{#if ../user}}
+            {{#or (compare commentBy '==' ../user._id) (compare ../user._id '==' ../postDetails.postBy)}}
+                <a id="comment-delete-btn" style="cursor: pointer;" data-comment-id="{{_id}}">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+            {{/or}}
+            {{/if}}
+        </h3>
+
+        {{!-- comment message --}}
+        <div id="comment-message">{{commentText}}</div>
+    </div>
+</div>
+
+{{/each}}
+{{else}}
+<h1 class="text-center">No comments</h1>
+{{/if}}
+</div>

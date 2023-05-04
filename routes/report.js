@@ -1,73 +1,30 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const { usersModel } = require("../model/users");
+const { reportModel } = require("../model/report")
 const ObjectId = require("mongoose").Types.ObjectId;
+// const { usersModel } = require("../model/users");
+// const { postModel } = require("../model/post");
+// const { savedPostModel } = require("../model/saved-post");
 
 
-/* Repoart */
-router.get('/', async function (req, res, next) {
-    try {
+/* List Report Data */
+router.get("/", async function (req, res, next) {
+  try {
+    
+    const search = req.query.search || "";
+    console.log("search", search);
 
-        const usersDetails = await usersModel.aggregate([
-          {
-            $lookup: {
-              from: "posts",
-              let: { userId: "$_id" },
-              pipeline: [
-                {
-                  $match: {
-                    $expr: {
-                      $eq: ["$postBy", "$$userId"],
-                    },
-                  },
-                },
-              ],
-              as: "createdPost",
-            },
-          },
+    const usersReport = await reportModel.find({ fullName : { $regex: search , $options: "i" } }).lean();
+    console.log("userReport", usersReport);
 
-          {
-            $lookup: {
-              from: "savedposts",
-              let: { userId: "$_id" },
-              pipeline: [
-                {
-                  $match: {
-                    $expr: {
-                      $eq: ["$$userId", "$savedBy"],
-                    },
-                  },
-                },
-              ],
-              as: "savedPost",
-            },
-          },
-          {
-            $project: {
-              firstName: 1,
-              lastName: 1,
-              fullName: { $concat: ["$firstName", " ", "$lastName"] },
-              profilePicture: {
-                name: 1,
-              },
-              totalCreatedPost: { $size: "$createdPost" },
-              totalSavedPost: { $size: "$savedPost" },
-            },
-          },
-        ]);
-
-        console.log("usersDetails =>", JSON.stringify(usersDetails));
-
-
-        res.render("report/index", 
-            { 
-                title: "report", 
-                usersDetails: usersDetails
-            }
-        )
-    } catch (error) {
-        res.render("error", { message: error })
-    }
+    res.render("report/index", {
+      title: "report",
+      usersReport:usersReport
+    });
+  } catch (error) {
+    console.log("error =>", error);
+    res.render("error", { message: error });
+  }
 });
 
 module.exports = router;

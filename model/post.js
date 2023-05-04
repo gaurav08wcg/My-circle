@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const ObjectId = mongoose.Schema.ObjectId;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 //  options for users
 const options = {
@@ -26,14 +26,14 @@ const postSchema = new mongoose.Schema({
         require: true,
         ref: "users"
     },
-    savedBy: [
-        {
-            userId: {
-                type: ObjectId,
-                ref: "users"
-            },
-        }
-    ],
+    // savedBy: [
+    //     {
+    //         userId: {
+    //             type: ObjectId,
+    //             ref: "users"
+    //         },
+    //     }
+    // ],
     postImage: {
         name: {
             type: String

@@ -1,159 +1,195 @@
 <div class="page-wrapper">
-    <!-- Page header -->
-    <div class="page-header d-print-none">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    <h2 class="page-title">
-                        Report
-                    </h2>
-                </div>
-            </div>
+  <!-- Page header -->
+  <div class="page-header d-print-none">
+    <div class="container-xl">
+      <div class="row g-2 align-items-center">
+        <div class="col">
+          <h2 class="page-title">
+            Report
+          </h2>
         </div>
+      </div>
     </div>
-    <!-- Page body -->
-    <div class="page-body">
-        <div class="container-xl">
-            <!-- Content here -->
+  </div>
+  <!-- Page body -->
+  <div class="page-body">
+    <div class="container-xl">
+      <!-- Content here -->
 
-            {{!-- ========== All statistics ==========  --}}
-            {{!-- <div class="col-12 mb-4">
-                <div class="row row-cards">
+      {{!-- ========== All statistics ========== --}}
+      <div class="col-12 mb-4" id="all-statistic">
+        <div class="row row-cards">
 
-                  <div class="col-sm-6 col-lg-3">
-                    <div class="card card-sm">
-                      <div class="card-body">
-                        <div class="row align-items-center">
-                          <div class="col-auto">
-                            <span class="bg-primary text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2"></path><path d="M12 3v3m0 12v3"></path></svg>
-                            </span>
-                          </div>
-                          <div class="col">
-                            <div class="font-weight-medium">
-                              132 Sales
-                            </div>
-                            <div class="text-muted">
-                              12 waiting payments
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-sm-6 col-lg-3">
-                    <div class="card card-sm">
-                      <div class="card-body">
-                        <div class="row align-items-center">
-                          <div class="col-auto">
-                            <span class="bg-green text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M17 17h-11v-14h-2"></path><path d="M6 5l14 1l-1 7h-13"></path></svg>
-                            </span>
-                          </div>
-                          <div class="col">
-                            <div class="font-weight-medium">
-                              78 Orders
-                            </div>
-                            <div class="text-muted">
-                              32 shipped
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-sm-6 col-lg-3">
-                    <div class="card card-sm">
-                      <div class="card-body">
-                        <div class="row align-items-center">
-                          <div class="col-auto">
-                            <span class="bg-twitter text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c0 -.249 1.51 -2.772 1.818 -4.013z"></path></svg>
-                            </span>
-                          </div>
-                          <div class="col">
-                            <div class="font-weight-medium">
-                              623 Shares
-                            </div>
-                            <div class="text-muted">
-                              16 today
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-lg-3">
-                    <div class="card card-sm">
-                      <div class="card-body">
-                        <div class="row align-items-center">
-                          <div class="col-auto">
-                            <span class="bg-facebook text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path></svg>
-                            </span>
-                          </div>
-                          <div class="col">
-                            <div class="font-weight-medium">
-                              132 Likes
-                            </div>
-                            <div class="text-muted">
-                              21 today
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div>  --}}
-
-            {{!-- ========== user's details table ======== --}}
-            <div class="card">
-                
-                <div class="card-header">
-                    <h3 class="card-title h2 ">
-                        <b>User's Statistics</b>
-                    </h3>
-                </div>
-
-                {{!-- ======= card body ===== --}}
+          {{!-- Total created Post of all users --}}
+          <div class="col-sm-6 col-lg-4">
+            <div class="card card-sm">
               <div class="card-body">
-                <div id="table-default" class="table-responsive">
-
-                    {{!-- table --}}
-                  <table class="table">
-                    
-                    {{!-- Table head --}}
-                    <thead>
-                      <tr>
-                        <th><button class="table-sort h4" data-sort="sort-name">No.</button></th>
-                        <th><button class="table-sort h4" data-sort="sort-name">Name</button></th>
-                        <th><button class="table-sort h4" data-sort="sort-city">Created Post</button></th>
-                        <th><button class="table-sort h4" data-sort="sort-type">Saved post</button></th>
-                        <th><button class="table-sort h4" data-sort="sort-score">Save post by Others</button></th>
-                      </tr>
-                    </thead>
-
-                    {{!-- table description --}}
-                    <tbody class="table-tbody">
-                      {{#if usersDetails}}
-                      {{#each usersDetails}}
-                        <tr>
-                            <td class="sort-name h4"> {{#sumByNumber @index 1}}{{/sumByNumber}}</td>
-                            <td class="sort-name h4">{{fullName}}</td>
-                            <td class="sort-city h4">{{totalCreatedPost}}</td>
-                            <td class="sort-type h4">{{totalSavedPost}}</td>
-                            <td class="sort-score h4">100,0%</td>
-                        </tr>
-                        {{/each}}
-                      {{/if}}
-                    </tbody>
-                  </table>
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span
+                      class="bg-primary text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-square-rounded-plus-filled" width="24" height="24"
+                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path
+                          d="M12 2l.324 .001l.318 .004l.616 .017l.299 .013l.579 .034l.553 .046c4.785 .464 6.732 2.411 7.196 7.196l.046 .553l.034 .579c.005 .098 .01 .198 .013 .299l.017 .616l.005 .642l-.005 .642l-.017 .616l-.013 .299l-.034 .579l-.046 .553c-.464 4.785 -2.411 6.732 -7.196 7.196l-.553 .046l-.579 .034c-.098 .005 -.198 .01 -.299 .013l-.616 .017l-.642 .005l-.642 -.005l-.616 -.017l-.299 -.013l-.579 -.034l-.553 -.046c-4.785 -.464 -6.732 -2.411 -7.196 -7.196l-.046 -.553l-.034 -.579a28.058 28.058 0 0 1 -.013 -.299l-.017 -.616c-.003 -.21 -.005 -.424 -.005 -.642l.001 -.324l.004 -.318l.017 -.616l.013 -.299l.034 -.579l.046 -.553c.464 -4.785 2.411 -6.732 7.196 -7.196l.553 -.046l.579 -.034c.098 -.005 .198 -.01 .299 -.013l.616 -.017c.21 -.003 .424 -.005 .642 -.005zm0 6a1 1 0 0 0 -1 1v2h-2l-.117 .007a1 1 0 0 0 .117 1.993h2v2l.007 .117a1 1 0 0 0 1.993 -.117v-2h2l.117 -.007a1 1 0 0 0 -.117 -1.993h-2v-2l-.007 -.117a1 1 0 0 0 -.993 -.883z"
+                          fill="currentColor" stroke-width="0"></path>
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium h3">
+                      Total Created post
+                    </div>
+                    <div class="text-muted h3">
+                      {{#sumOfArrElements usersReport "totalCreatedPost"}} {{/sumOfArrElements}}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+
+          {{!-- Total saved Post of all user by me--}}
+          <div class="col-sm-6 col-lg-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span
+                      class="bg-green text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bookmark" width="24"
+                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"></path>
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium h3">
+                      Total Saved Post On
+                    </div>
+                    <div class="text-muted h3">
+                      {{#sumOfArrElements usersReport "totalSavedPost"}} {{/sumOfArrElements}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {{!-- Total post saved by other users --}}
+          <div class="col-sm-6 col-lg-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span
+                      class="bg-twitter text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24"
+                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium h3">
+                      Total Saved post By Others
+                    </div>
+                    <div class="text-muted h3">
+                      {{#sumOfArrElements usersReport "totalSavedByOther"}} {{/sumOfArrElements}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
+      </div>
+
+      {{!-- ========== user's details table ======== --}}
+      <div class="card" id="user-statistic-card">
+
+        <div class="card-header">
+          {{!-- user Table title --}}
+          <div class="col-8">
+            <h3 class="card-title h2">
+              <b>User's Statistics</b>
+            </h3>
+          </div>
+
+          {{!-- User Search box --}}
+          <div class="input-icon col-3">
+            <span class="input-icon-addon">
+              <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                <path d="M21 21l-6 -6"></path>
+              </svg>
+            </span>
+            <input id="search-user-field" name="searchUser" type="text" class="form-control" placeholder="Search User…"
+              aria-label="Search in websitse">
+          </div>
+        </div>
+
+        {{!-- ======= card body ===== --}}
+        <div class="card-body" id="user-table-card-body">
+          {{#if usersReport}}
+          <div id="table-default" class="table-responsive">
+
+            {{!-- table --}}
+            <table class="table">
+
+              {{!-- Table head --}}
+              <thead>
+                <tr>
+                  <th><button class="table-sort h4" data-sort="sort-name">No.</button></th>
+                  <th><button class="table-sort h4" data-sort="sort-name">Name</button></th>
+                  <th><button class="table-sort h4" data-sort="sort-city">Created Post</button></th>
+                  <th><button class="table-sort h4" data-sort="sort-type">Saved post</button></th>
+                  <th><button class="table-sort h4" data-sort="sort-score">Save post by Others</button></th>
+                </tr>
+              </thead>
+
+              {{!-- table description --}}
+              {{!-- {{#log usersReport}}{{/log}} --}}
+              <tbody class="table-tbody">
+                {{#each usersReport}}
+                <tr>
+                  <td class="sort-name h4"> {{#sumByNumber @index 1}}{{/sumByNumber}}</td>
+                  <td class="sort-name h4">{{fullName}}</td>
+                  <td class="sort-city h4">{{totalCreatedPost}}</td>
+                  <td class="sort-type h4">{{totalSavedPost}}</td>
+                  <td class="sort-score h4">{{totalSavedByOther}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+          {{else}}
+          <h1 class="text-center">User Not Found</h1>
+          {{/if}}
+        </div>
+      </div>
+
     </div>
+  </div>
+
+  {{!-- Event File --}}
+  {{#section "script"}}
+  <script src="./javascripts/report.js"></script>
+  <script>
+    new reportEvent();
+  </script>
+  {{/section}}

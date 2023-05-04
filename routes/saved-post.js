@@ -19,48 +19,132 @@ router.get('/', async function (req, res, next) {
         const match = { $match: { savedBy: new ObjectId(req.user._id) } };
         pipeline.push(match);
 
-        // STAGE 1 - lookup saved_post -> post
-        pipeline.push(
-            {
-                $lookup: {
-                    from: "posts",
-                    localField: "postId",
-                    foreignField: "_id",
-                    as: "saved_post"
-                }
+        /* ========= lookup with posts ============ */
+        pipeline.push({
+          $lookup: {
+            from: "posts",
+            let: { postId: "$postId" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $eq: ["$_id", "$$postId"],
+                  },
+                },
+              },
+              {
+                $project: {
+                  title: 1,
+                  description: 1,
+                  postImage: "$postImage.name",
+                  createdAt: 1,
+                  postBy: 1,
+                },
+              },
+            ],
+            as: "postDetails",
+          },
+        });
+
+        /* ========= lookup with users ============ */
+        pipeline.push({
+          $lookup: {
+            from: "users",
+            let: { postBy: "$postBy" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $eq: ["$_id", "$$postBy"],
+                  },
+                },
+              },
+              {
+                $project: {
+                  firstName: 1,
+                  lastName: 1,
+                  profilePicture:"$profilePicture.name"
+                },
+              },
+            ],
+            as: "postBy",
+          },
+        });
+
+        /* ========= lookup with comments ============ */
+        pipeline.push({
+          $lookup: {
+            from: "comments",
+            let: { postId: "$postId" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $eq: ["$postId", "$$postId"],
+                  },
+                },
+              },
+              {
+                $group: { _id: null, total: { $sum: 1 } },
+              },
+            ],
+            as: "comments",
+          },
+        });
+
+
+        /* ========= project all data ============ */
+        pipeline.push({
+            $project: {
+                postDetails: { $arrayElemAt: ["$postDetails", 0] },
+                totalComments: { $arrayElemAt : [ "$comments.total", 0] },
+                postBy : { $arrayElemAt : [ "$postBy", 0] },
             }
-        );
+        })
+
+
+        // STAGE 1 - lookup saved_post -> post
+        // pipeline.push(
+        //     {
+        //         $lookup: {
+        //             from: "posts",
+        //             localField: "postId",
+        //             foreignField: "_id",
+        //             as: "saved_post"
+        //         }
+        //     }
+        // );
 
         // STAGE 2 - access 1st element of lookup output
-        pipeline.push(
-            {
-                $project: {
-                    postDetails: { $first: "$saved_post" }
-                }
-            }
-        );
+        // pipeline.push(
+        //     {
+        //         $project: {
+        //             postDetails: { $first: "$saved_post" }
+        //         }
+        //     }
+        // );
 
         // STAGE 3 - lookup postsDetails -> user
-        pipeline.push(
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "postDetails.postBy",
-                    foreignField: "_id",
-                    as: "postBy"
-                }
-            }
-        );
+        // pipeline.push(
+        //     {
+        //         $lookup: {
+        //             from: "users",
+        //             localField: "postDetails.postBy",
+        //             foreignField: "_id",
+        //             as: "postBy"
+        //         }
+        //     }
+        // );
 
         // STAGE 4 - project final output
-        pipeline.push(
-            {
-                $project: {
-                    postDetails: 1,
-                    posted_user_info: { $first: "$postBy" }
-                }
-            }
-        );
+        // pipeline.push(
+        //     {
+        //         $project: {
+        //             postDetails: 1,
+        //             posted_user_info: { $first: "$postBy" }
+        //         }
+        //     }
+        // );
 
         // stage 5 - skip limit for pagination
         pipeline.push(
@@ -74,7 +158,7 @@ router.get('/', async function (req, res, next) {
         console.log("savedPosts =>", savedPosts);
         
         // total count of saved post
-        const totalSavedPostCount = await savedPostModel.find({savedBy: new ObjectId(req.user._id)}).count();
+        const totalSavedPostCount = await savedPostModel.count({savedBy: new ObjectId(req.user._id)});
         console.log("totalSavedPostCount =>", totalSavedPostCount);
         
         // total no of pages
@@ -102,6 +186,7 @@ router.get('/', async function (req, res, next) {
 router.post("/:id", async (req, res, next) => {
     try {
         console.log("id =>", req.params);
+        const postBy = req.query.postBy;
 
         const alreadySaved = await savedPostModel.findOne({ postId: req.params.id, savedBy: req.user._id });
         console.log("alreadySaved =>", alreadySaved);
@@ -111,7 +196,7 @@ router.post("/:id", async (req, res, next) => {
             return res.send("post unsaved");
         }
 
-        await savedPostModel.create({ postId: req.params.id, savedBy: req.user._id });
+        await savedPostModel.create({ postId: req.params.id, savedBy: req.user._id, postBy : req.query.postBy  });
 
         res.send("post saved");
 

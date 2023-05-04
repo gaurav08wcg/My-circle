@@ -1,12 +1,19 @@
 const signIn = function(){  
-    const _this=this;
     
-    _this.init = function (){
+    this.init = function (){
         _this.validateForm();
+        _this.flashMessage()
+    }
+
+    // show flash message (sign up successfully)
+    this.flashMessage = function (){
+        setTimeout(() => { 
+            $(".flash-msg").empty()
+        },4000)
     }
 
     // form validation
-    _this.validateForm = function(){
+    this.validateForm = function(){
         $("#sign-in-form").validate({
             rules:{
                 email:{
@@ -28,6 +35,6 @@ const signIn = function(){
             }
         })
     }
-
+    const _this=this;
     _this.init();
 }

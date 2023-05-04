@@ -5,6 +5,16 @@
         <div class="text-center mb-4">
           <a href="." class="navbar-brand navbar-brand-autodark"><img src="./static/logo.svg" height="36" alt=""></a>
         </div>
+
+        {{!-- Flash message --}}
+        <div class="flash-msg">
+          {{#if message}}
+            <div class="alert alert-{{#compare className "==" "success"}}success{{else}}danger{{/compare}}">
+              {{message}}
+            </div>
+          {{/if}}
+        </div>
+
         <div class="card card-md">
           <div class="card-body">
             <h2 class="h2 text-center mb-4">Login to your account</h2>
@@ -82,3 +92,10 @@
   })
 </script>
 {{/section}}
+
+
+
+function sum(a,b,c= 2){
+console.log(a+b+c);
+}
+sum(3,4,null);

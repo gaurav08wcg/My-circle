@@ -1,10 +1,10 @@
 const listUsersEvent = function (){
-    const _this = this;
 
-    _this.init = function (){
+    this.init = function (){
         _this.sortUser();
         _this.searchUser();
         _this.pagination();
+        _this.resetButton();
     }
 
     //  Query String -> Object cunverter function
@@ -20,7 +20,7 @@ const listUsersEvent = function (){
     }
 
     // filter & search event
-    _this.sortUser = function (){
+    this.sortUser = function (){
         let sortOrder = -1;
         $(document).on("click","#btn-sort-datetime", function(){
             const query = window.location.search;
@@ -42,7 +42,7 @@ const listUsersEvent = function (){
     }
 
     // search event
-    _this.searchUser = function (){
+    this.searchUser = function (){
         $(document).on("click","#search-user-btn", function(){
             
             // encodeURIComponent convert space -> %20 (for space full string )
@@ -57,7 +57,7 @@ const listUsersEvent = function (){
     }
 
     // pagination event
-    _this.pagination = function(){
+    this.pagination = function(){
         $(document).off("click", ".page-link").on("click", ".page-link", function () {
             const page = $(this).attr("data-page-no");
             const query = window.location.search;   // get query string
@@ -76,10 +76,26 @@ const listUsersEvent = function (){
 
             $('.page-wrapper').load(`${url} .page-wrapper`, function () {
                 _this.sortUser();
+                $(`#page-no-${page}`).addClass("active");   // selected page no set active
                 window.history.pushState(null, null, url);
             });
         })
     }
 
+        // reset all filter & search btn 
+    this.resetButton = function (){
+    
+        $(document).on("click", "#reset-btn", function(){
+            const queryObj = queryToObj(window.location.search);
+            let url = `/users`;
+            // console.log("reset url",url);
+
+            $("#user-list-page").load(`${url} #user-list-page`, function(){
+                window.history.pushState(null,null,url);
+            });
+        })
+    }
+    
+    const _this = this;
     _this.init();
 }

@@ -9,9 +9,12 @@ const listAllPostEvent = function () {
         _this.sortPostByTitle();
         _this.sortPostByDateTime();
         _this.pagination();
+        _this.resetButton();
+        _this.flashMessage();
+        // _this.viewPostBtn();
     }
 
-    //  Query String -> Object cunverter function
+    //  Query String -> Object converter function
     function queryToObj(queryString) {
         const pairs = queryString.substring(1).split('&');
 
@@ -51,13 +54,14 @@ const listAllPostEvent = function () {
             // console.log("click");
 
             const postId = $(this).attr("data-post-id");
-
+            const postBy = $(this).attr("data-postBy-id");
             $.ajax({
                 method: "post",
-                url: `saved-post/${postId}`,
+                url: `saved-post/${postId}?postBy=${postBy}`,
                 success: function (response) {
                     console.log("response =>", response);
-                    alert(response);
+                    toastr.success(response, "Success", { timeOut: 1000 });
+                    // alert(response);
                 },
                 error: function (error) {
                     $(".page-body").html(error);
@@ -68,26 +72,28 @@ const listAllPostEvent = function () {
 
     // archive post event
     this.archivePostButton = function () {
-        $(document).on("click", "#archive-post-btn", function (e) {
+        
+        $(document).off("click", "#archive-post-btn").on("click", "#archive-post-btn", function (e) {
             e.preventDefault();
+
             const postId = $(this).attr("data-post-id");
-            const url = `/?postId=${postId}&archive=true`;
-            $(".page-body").load(`${url} .page-body`, function () {
-                window.history.pushState(null, null, url);
+
+            $.ajax({
+                method: "put",
+                url: `/post/archive/${postId}`,
+                success: function(response){
+                    console.log(response);
+                    toastr.success(response?.message, response?.type, { timeOut: 1000 });
+                    $(".page-wrapper").load("/ .ajax-res");
+                }
             });
 
-            // $.ajax({
-            //     method: "get",
-            //     url: url,
-            //     success: function (response) {
-            //         $(".page-body").load(`${url} .page-body`, function(){
-            //             window.history.pushState(null, null, url);
-            //         });
-            //     },
-            //     error: function (error) {
-
-            //     }
-            // })
+            /* code working but without using put route of post  */ 
+            // const url = `/?postId=${postId}&archive=true`;
+            // $(".page-body").load(`${url} .page-body`, function () {
+            //     window.history.pushState(null, null, url);
+            // });
+            // toastr.success('Post Archived','Success', { timeOut: 1000 })
         });
     }
 
@@ -203,23 +209,44 @@ const listAllPostEvent = function () {
 
             $('.page-body').load(`${url} .page-body`, function () {
                 _this.sortPostByDateTime();
+                _this.sortPostByTitle();                
+                $(`#page-no-${page}`).addClass("active");   // selected page no set active
                 window.history.pushState(null, null, url);
             });
             // $("#total-post").load(`${url} #total-post`);
-
-            // $.ajax({
-            //     method: 'get',
-            //     url: url,
-            //     success: function (response) {
-            //         $('.page-body').load(`${url} .page-body`, function () {
-            //             _this.sortPostByDateTime();
-            //             window.history.pushState(null, null, url);
-            //         });
-            //         $("#total-post").load(`${url} #total-post`);
-            //     }
-            // })
         })
     }
+
+    // reset all filter & search btn 
+    this.resetButton = function (){
+        
+        $(document).on("click", "#reset-btn", function(){
+            const queryObj = queryToObj(window.location.search);
+            let url = `/`;
+            // console.log("reset url",url);
+
+            $("#timeline-page-content").load(`${url} #timeline-page-content`, function(){
+                window.history.pushState(null,null,url);
+            });
+        })
+    }
+
+    // show flash message (sign up successfully)
+    this.flashMessage = function (){
+        setTimeout(() => { 
+            $(".flash-msg").empty()
+        },4000)
+    }
+
+    // view particular post (not use)
+    // this.viewPostBtn = function (){
+    //     $(document).on("click", "#view-post-btn", function () {
+    //         const url = `/post/view/${$(this).attr("data-post-id")}`;
+    //         $("#timeline-page-content").load(`${url} #view-post`, function(){
+    //             window.history.pushState(null,null,url);
+    //         })
+    //     })
+    // }
 
     const _this = this;
     _this.init();

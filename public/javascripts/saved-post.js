@@ -16,6 +16,7 @@ const savedPostEvent = function () {
             const postId = $(this).attr("data-post-id");
             const url = `/saved-post?postId=${postId}&unSave=true`;
             $(".page-wrapper").load(`${url} .page-wrapper`);
+            toastr.success('Post unsaved', 'Success', { timeOut: 1000 });
 
             // $.ajax({
             //     method: "get",
@@ -35,19 +36,9 @@ const savedPostEvent = function () {
             const url = `/saved-post?page=${page}`;
 
             $(".page-wrapper").load(`${url} .page-wrapper`, function () {
+                $(`#page-no-${page}`).addClass("active");   // selected page no set active
                 window.history.pushState(null, null, url);
             });
-
-            // $.ajax({
-            //     method:"get",
-            //     url:url,
-            //     success: function(response){
-            //         $(".page-wrapper").load(`${url} .page-wrapper`, function(){
-            //             window.history.pushState(null, null, url);
-            //         });
-            //         $('#total-post').load(`${url} #total-post`);
-            //     }
-            // })
         })
     }
 

@@ -22,10 +22,22 @@ const archivedPostEvent = function () {
     _this.unarchiveButtonEvent = function () {
         $(document).on("click", "#unarchive-post-btn", function () {
             const postId = $(this).attr("data-post-id");
-            const url = `/archived-post?postId=${postId}&archive=false`;
-            $('.page-wrapper').load(`${url} .page-wrapper`, function () {
-                window.history.pushState(null, null, url)
-            });
+            console.log("sdfsdf");
+            $.ajax({
+                method: "put",
+                url : `/post/unarchive/${postId}`,
+                success: function(response){
+                    console.log(response);
+                    toastr.success(response?.message, response?.type, { timeOut: 1000 });
+                    $('.page-wrapper').load(`/archived-post .page-wrapper`)
+                }
+            })
+
+            // const url = `/archived-post?postId=${postId}&archive=false`;
+            // $('.page-wrapper').load(`${url} .page-wrapper`, function () {
+            //     window.history.pushState(null, null, url)
+            // });
+            // toastr.success('Post unarchive', 'Success',{ timeOut: 1000 });     // unarchive message
         })
     }
 
@@ -40,6 +52,7 @@ const archivedPostEvent = function () {
             console.log("queryObj",queryObj);
 
             $(".page-wrapper").load(`${url} .page-wrapper`, function () {
+                $(`#page-no-${page}`).addClass("active");   // selected page no set active
                 window.history.pushState(null, null, url);
             });
 

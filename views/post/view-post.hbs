@@ -1,0 +1,83 @@
+<div class="page-wrapper" id="view-post">
+    <!-- Page header -->
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <h2 class="page-title">
+                        View Post
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page body -->
+    <div class="page-body">
+        <div class="container-xl">
+            <!-- Content here -->
+
+            {{!-- Post Details --}}
+            <div class="col-lg-12 mb-3">
+                <div class="card">
+                    <div class="row row-0">
+
+                        {{!-- Post image --}}
+                        <div class="col-6">
+                            <!-- Photo -->
+                            <img
+                                src="/uploads/posts/{{postDetails.postImage}}"
+                                class="w-100 h-100 object-cover card-img-start"
+                                alt="Beautiful blonde woman relaxing with a can of coke on a tree stump by the beach">
+                           
+                        </div>
+
+                        {{!-- Post's Other details --}}
+                        <div class="col">
+                            <div class="card-body">
+
+                                {{!-- Post title --}}
+                                <h3 class="card-title h2"> <b>Title</b> : {{postDetails.title}}</h3>
+
+                                {{!-- post Description --}}
+                                <div class="h3 pb-3 pt-3">
+                                   <b >Description :</b> 
+                                   <span class="text-muted h4">{{postDetails.description}}</span>
+                                </div>
+
+                                {{!-- posted user details --}}
+                                <div class="h3 pb-2 pt-2">
+                                   Posted By : <span class="fw-normal"> {{postDetails.postUserInfo.firstName}} {{postDetails.postUserInfo.lastName}}</span>
+                                </div>
+
+                                {{!-- post create date --}}
+                                <div class="h3 pb-2 pt-2">
+                                   Created On : <span class="fw-normal"> {{moment postDetails.createdAt}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {{!-- comment section --}}
+            {{>comment/comment}}   
+
+        </div>
+    </div>
+
+</div>
+
+{{!-- Event File --}}
+{{#section "script"}}
+<script src="/javascripts/view-post.js"></script>
+<script>
+    var postId = `{{ postDetails._id}}`
+
+    $(document).ready(function () {
+
+        new viewPostEvent();
+
+    })
+</script>
+{{/section}}

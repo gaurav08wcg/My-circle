@@ -15,6 +15,11 @@ const savedPostSchema = new mongoose.Schema({
         require: true,
         ref: "post"
     },
+    postBy:{
+      type: ObjectId,
+      require: true,
+      ref: "post"
+    },
     savedBy: {
         type:ObjectId,
         require: true,
