@@ -15,7 +15,7 @@
                         <form id="add-comment-form" class="row">
                             {{! Add comment }}
                             <div class="mb-3 col-8">
-                                <label class="form-label h4" id="commen-label">Add Comment 
+                                <label class="form-label h4" id="commen-label">Add Comment
                                     <span class="form-label-description">
                                         100/
                                         <span class="form-label-description" id="characters">
@@ -23,13 +23,20 @@
                                         </span>
                                     </span>
                                 </label>
-                                <textarea id="comment-field" class="form-control" name="commentText" rows="2"
-                                    placeholder="Write comment message.."></textarea>
-                            </div>
 
+                                {{!-- text area --}}
+                                <p class="lead emoji-picker-container">
+                                     {{!-- data-emojiable="true" data-emoji-input="unicode" --}}
+                                    <textarea id="comment-field" class="form-control"
+                                        name="commentText" rows="2" placeholder="Write comment message.."></textarea>
+                                </p>
+                    
+                            </div>
+                        
                             {{!-- comment btn --}}
                             <div class="col-2 m-4">
-                                <button id="comment-btn" data-post-id="{{postDetails._id}}" data-user-id="{{user._id}}" type="submit" class="btn btn-primary w-100">
+                                <button id="comment-btn" data-post-id="{{postDetails._id}}" data-user-id="{{user._id}}" type="submit"
+                                    class="btn btn-primary w-100">
                                     Add comment
                                 </button>
                             </div>

@@ -3,16 +3,23 @@ const viewPostEvent = function () {
     _this.commentAddBtn();
     _this.commentDeleteBtn();
     _this.countCharacter();
+    _this.emojiPicker();
   };
 
+  // emoji picker set up
+  this.emojiPicker = function () {
+    window.emojiPicker = new EmojiPicker({
+      emojiable_selector: "[data-emojiable=true]",
+      assetsPath: "/assets/img/emoji-picker",
+      popupButtonClasses: "fa-regular fa-face-smile",
+    });
+    window.emojiPicker.discover();
+  };
 
   // count commented character length
   this.countCharacter = function () {
     $("#comment-field").on("input", function () {
-      let Characters =  $("#characters").text($("#comment-field").val().split(" ").join("").length);
-      $("#comment-label").load(`/post/view/${postId} #comment-label`, function(){
-        $("#characters").text(Characters);
-      });
+      $("#characters").html(`<b>${$(this).val().length}<b>`);
     });
   };
 
@@ -45,14 +52,15 @@ const viewPostEvent = function () {
             // success response
             if (response.type == "success") {
               toastr.success(response.message, { timeOut: 500 });
-              $("#comment-field").val("");
-              $("#characters").text("0")
+              $(".emoji-wysiwyg-editor").text("");
+              $("#characters").text("0");
               $("#comment-container").load(
                 `${loadUrl} #comment-container`,
                 function () {
                   window.history.pushState(null, null, loadUrl);
                 }
               );
+
             }
 
             // error response
@@ -77,8 +85,7 @@ const viewPostEvent = function () {
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
-
-        //when click on confirm 
+        //when click on confirm
         if (result.isConfirmed) {
           const loadUrl = `/post/view/${postId}`;
           $.ajax({
