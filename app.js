@@ -10,7 +10,7 @@ const  flash = require('connect-flash');
 
 const handlebarHelpers = require('handlebars-helpers')();  // handlebar helpers
 const customHelper = require("./utils/helpers");  // custom helpers file 
-const commonFun = require("./common/functions");
+const commonFun = require("./common/functions");  // functions
 const { job } =  require("./cron/cron");    // cronJob
 
 /* Require Route files */

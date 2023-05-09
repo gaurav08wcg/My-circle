@@ -60,7 +60,7 @@ const listAllPostEvent = function () {
                 url: `saved-post/${postId}?postBy=${postBy}`,
                 success: function (response) {
                     console.log("response =>", response);
-                    toastr.success(response, "Success", { timeOut: 1000 });
+                    toastr.success(response, { timeOut: 1000 });
                     // alert(response);
                 },
                 error: function (error) {

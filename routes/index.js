@@ -10,6 +10,7 @@ const nodeMailer = require("../email-sender");   // node mailer
 const { usersModel } = require("../model/users");
 const { postModel } = require("../model/post");
 const { savedPostModel } = require("../model/saved-post");
+// const { notificationModel } = require("../model/notifications");
 
 /* --------- passport authentication configuration ----------  */
 auth.localStrategyInitialization();
@@ -42,6 +43,13 @@ router.get("/validate/email", async (req, res, next) => {
 /* GET home page ( Landing page ). */
 router.get("/", async function (req, res, next) {
   try {
+
+    // socket connected
+    io.on("connection", (socket) =>{
+      console.log("Socket Connected...");
+      console.log("socket id =>",socket.id);  
+    })
+
     // query data
     const filter = req.query.filter;
     const sortBy = req.query.sortBy;

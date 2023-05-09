@@ -40,6 +40,13 @@
 <body>
   <script src="/assets/js/demo-theme.min.js?1674944402"></script>
 
+  {{!-- Socket connection --}}
+  <script src="/socket.io/socket.io.min.js"></script>
+  <script>
+    var socket = io(`http://192.168.1.174:3000`, {transports:["websocket"]});
+    socket.on("connection");
+  </script>
+
   {{!-- navbar --}}
   {{>header}}
 
