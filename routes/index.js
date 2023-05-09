@@ -6,6 +6,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 // const LocalStrategy = require("passport-local").Strategy;
 
 const auth = require("../auth");
+const nodeMailer = require("../email-sender");   // node mailer
 const { usersModel } = require("../model/users");
 const { postModel } = require("../model/post");
 const { savedPostModel } = require("../model/saved-post");
@@ -269,7 +270,18 @@ router.post("/signup", async (req, res, next) => {
   try {
     const bodyData = req.body;
     bodyData["password"] = md5(req.body.password);
+
+    // create user
     await usersModel.create(bodyData);
+
+    // send Registration Successfully mail to user account
+    const mailOptions = {
+      userEmail: bodyData.email,
+      subject: "My-Circle Registration",
+      text: `Your Registration Successfully, ${bodyData.firstName} ${bodyData.lastName}`,
+    };
+    nodeMailer.sendMail(mailOptions);
+
     req.flash('message', `Sign up successfully, ${bodyData.firstName}`);
     req.flash('className','success');
     res.redirect("/signin");

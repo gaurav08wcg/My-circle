@@ -12,8 +12,6 @@ const handlebarHelpers = require('handlebars-helpers')();  // handlebar helpers
 const customHelper = require("./utils/helpers");  // custom helpers file 
 const commonFun = require("./common/functions");
 const { job } =  require("./cron/cron");    // cronJob
-const { nodeMailerConfig } = require("./email-sender");
-nodeMailerConfig();
 
 /* Require Route files */
 const indexRouter = require("./routes/index");

@@ -6,3 +6,5 @@ public/uploads/profilePicture
 
 # post's images
 public/uploads/posts
+
+.env

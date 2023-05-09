@@ -46,7 +46,22 @@ const usersSchema = new mongoose.Schema(
       path:{
         type:String
       },
-    }
+    },
+    isVerify: {
+      type: Boolean,
+      default: false
+    },
+    verificationDate: {
+      type: Date      
+    },
+    lastVerifyLinkSend: {
+      type: Date,
+      default: new Date()
+    },
+    totalVerifyLinkSend:{
+      type:Number,
+      default: 0
+    } 
   },
   options
 );

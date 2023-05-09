@@ -138,4 +138,13 @@ router.get('/', async function (req, res, next) {
   }
 });
 
+/* User Email verification */
+router.get("/:userId/email-verification/", async (req,res,next) => {
+    try {
+        res.render("email/email-verification", { title: "email verification", layout:"auth" })
+    } catch (error) {
+        res.render("error", { message: error })
+    }
+})
+
 module.exports = router;
