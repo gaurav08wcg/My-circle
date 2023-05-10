@@ -21,6 +21,7 @@ const savedPostRouter = require("./routes/saved-post");
 const usersRouter = require("./routes/users");
 const reportRouter = require("./routes/report");
 const archivedPostRouter = require("./routes/archived-post");
+const notificationRouter = require("./routes/notification");
 
 const app = express();
 
@@ -87,6 +88,7 @@ app.use("/saved-post", savedPostRouter);
 app.use("/archived-post", archivedPostRouter);
 app.use("/users", usersRouter);
 app.use("/report", reportRouter);
+app.use("/notification", notificationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { savedPostModel } = require("../model/saved-post");
+const { notificationModel } = require("../model/notifications");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 /* show Saved Posts */
@@ -196,7 +197,18 @@ router.post("/:id", async (req, res, next) => {
             return res.send("post unsaved");
         }
 
+        // save post query 
         await savedPostModel.create({ postId: req.params.id, savedBy: req.user._id, postBy : req.query.postBy  });
+
+        // send notification
+        const notificationObject = {};
+        notificationObject["receiverUserId"] = req.query.postBy;
+        notificationObject["savedBy"] = req.user._id;
+        notificationObject["notificationType"] = "save post";
+        await notificationModel.create(notificationObject);
+
+        // emit notification to post owner 
+        io.to(req.query.postBy).emit("notify", `your post saved By ${req.user.firstName} ${req.user.lastName}`);
 
         res.send("post saved");
 

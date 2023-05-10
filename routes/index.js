@@ -7,6 +7,9 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 const auth = require("../auth");
 const nodeMailer = require("../email-sender");   // node mailer
+const serverSocket = require("../server-socket");
+
+/* models */
 const { usersModel } = require("../model/users");
 const { postModel } = require("../model/post");
 const { savedPostModel } = require("../model/saved-post");
@@ -44,11 +47,8 @@ router.get("/validate/email", async (req, res, next) => {
 router.get("/", async function (req, res, next) {
   try {
 
-    // socket connected
-    io.on("connection", (socket) =>{
-      console.log("Socket Connected...");
-      console.log("socket id =>",socket.id);  
-    })
+    // create new room name of userId and store their sockets
+    serverSocket.createRoom();
 
     // query data
     const filter = req.query.filter;

@@ -13,7 +13,7 @@ const options = {
 };
 
 const notificationSchema = new mongoose.Schema({
-    userId:{
+    receiverUserId:{
         type:ObjectId,
         require: true,
         ref: "users"
@@ -32,7 +32,7 @@ const notificationSchema = new mongoose.Schema({
     },
     notificationType:{
         type:String
-    }
+    },
 },options);
 
 const notificationModel = mongoose.model("notifications", notificationSchema);

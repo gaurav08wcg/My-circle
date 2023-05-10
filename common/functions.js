@@ -8,7 +8,7 @@ module.exports = {
     checkAuth: function (req, res, next) {
         try {
             const reqUrl = req.url.split("/")?.[req.url.split("/").length - 1]; 
-            console.log("reqUrl =>", reqUrl);
+            // console.log("reqUrl =>", reqUrl);
             
             // when user click on email-verification link can't check authentication
             const isNotEmailVerifyRoute = (reqUrl != "email-verification");
