@@ -4,6 +4,25 @@ const commanEvents = function (){
         _this.notificationBtnEvent();
         _this.notificationIconLoadEvent();
         _this.notificationSeenBtnEvent();
+        _this.toastrMsgConfig();
+    }
+
+    // toastr message configuration
+    this.toastrMsgConfig = function(){
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            // "positionClass": "toast-bottom-full-width",
+            "onclick": null,
+            "showDuration": "300000",
+            "hideDuration": "1000",
+            "timeOut": "2000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
     }
 
     // notification button click event
