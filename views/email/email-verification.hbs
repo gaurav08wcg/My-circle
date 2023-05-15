@@ -15,5 +15,17 @@
     <div class="page-body">
         <div class="container-xl">
             <!-- Content here -->
+
+            {{!-- When user already verified --}}
+            {{#if usrAlreadyVerify}}
+                <h1><b>{{userDetail.firstName}} {{userDetail.lastName}}</b>, your email is already verified</h1>
+            {{else}}
+                {{!-- When verify link expired --}}
+                {{#if verifyLinkExpire}}
+                    <h1><b>{{userDetail.firstName}} {{userDetail.lastName}}</b>, your Verification link is expired on {{moment expireDate}}<br> Please generate new one</h1>
+                {{else}}
+                        <h1>Congrats<b>{{userName.firstName}} {{userName.lastName}}</b> , your email is Verify</h1>
+                {{/if}}
+            {{/if}}
         </div>
     </div>

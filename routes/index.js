@@ -278,15 +278,21 @@ router.post("/signup", async (req, res, next) => {
   try {
     const bodyData = req.body;
     bodyData["password"] = md5(req.body.password);
+    bodyData["totalVerifyLinkSend"] = 1;
 
     // create user
     await usersModel.create(bodyData);
+
+    // find created user's Object id
+    const userId = await usersModel.findOne({email: bodyData.email},{_id:1});
+    console.log("userId", userId._id);
 
     // send Registration Successfully mail to user account
     const mailOptions = {
       userEmail: bodyData.email,
       subject: "My-Circle Registration",
-      text: `Your Registration Successfully, ${bodyData.firstName} ${bodyData.lastName}`,
+      html: `<p>Your Registration Successfully, <b>${bodyData.firstName} ${bodyData.lastName},</b><br>
+      please verify your email</p><a href="http://localhost:3000/users/${userId._id}/email-verification" >Verify email</a>`,
     };
     nodeMailer.sendMail(mailOptions);
 

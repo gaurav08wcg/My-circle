@@ -1,18 +1,36 @@
 const profileEvent = function () {
-  const _this = this;
 
-  _this.init = function () {
+  this.init = function () {
     _this.validateEditProfileFrom();
+    _this.mailVerifyBtn();
   };
 
+  // toastr options
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "4000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
+
   // form validate
-  _this.validateEditProfileFrom = function () {
+  this.validateEditProfileFrom = function () {
 
     // add filesize method
     $.validator.addMethod('filesize', function(value, element, param) {
         return this.optional(element) || (element.files[0].size <= param) 
     });
-
 
     $("#edit-profile-form").validate({
         rules: {
@@ -53,5 +71,34 @@ const profileEvent = function () {
     // })
   };
 
+  // mail verification btn event
+  this.mailVerifyBtn = function (){
+    $(document).on("click", "#email-verification-btn", function(){
+      $.ajax({
+        method:"post",
+        url: `users/${loggedInUserId}/email-verification/resend-link`,
+        success: function(response){
+          // success
+          if(response.type =="success"){
+            $("#remaining-attempt-total").load("/profile #remaining-attempt-total", function(){
+              toastr.success(response.message);
+            });
+          }
+
+          // warning
+          if(response.type == "warning"){
+            toastr.warning(response.message);
+          }
+
+          // error
+          if(response.type == "error"){
+            toastr.error(response.message);
+          }
+        }
+      })
+    })
+  }
+
+  const _this = this;
   _this.init();
 };

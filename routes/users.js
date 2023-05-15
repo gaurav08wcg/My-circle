@@ -1,6 +1,11 @@
 var express = require('express');
 var router = express.Router();
+require("dotenv").config();
+
 const { usersModel } = require("../model/users");
+
+const { addHours, addMinutes,removeMinutes } = require("../common/functions");
+const nodeMailer = require("../email-sender");
 
 /* Users. */
 router.get('/', async function (req, res, next) {
@@ -141,10 +146,82 @@ router.get('/', async function (req, res, next) {
 /* User Email verification */
 router.get("/:userId/email-verification/", async (req,res,next) => {
     try {
-        res.render("email/email-verification", { title: "email verification", layout:"auth" })
-    } catch (error) {
-        res.render("error", { message: error })
-    }
-})
 
+      // when user is user already verify & click on verification link
+      const userDetail = await usersModel.findOne({ _id: req.params.userId}, { firstName:1, lastName:1, lastVerifyLinkSend:1, totalVerifyLinkSend:1, isVerify: 1 }).lean();
+      if(userDetail.isVerify == true){
+        return res.render("email/email-verification", { title: "email verification", layout:"auth", userDetail: userDetail, usrAlreadyVerify:true })
+      }
+      
+      // when link is expired (expire time 1 hour)
+      const nowDate = new Date().getTime();
+      const lastSendDate = new Date(userDetail.lastVerifyLinkSend).getTime();
+      //create expire date of link by 1 hour 
+      const expireDate = addHours(new Date(userDetail.lastVerifyLinkSend), Number(process.env.LINK_EXPIRE_TIME) ); // add 1 hour in lastLinkSendTime
+      const timeDifference = (nowDate - lastSendDate) / 1000 / 60 / 60 ;
+      if(timeDifference > Number(process.env.LINK_EXPIRE_TIME)){
+        return res.render("email/email-verification", { title: "email verification", layout:"auth", userDetail: userDetail, verifyLinkExpire: true,  expireDate: expireDate})
+      }
+
+      // update user email is verify true
+      await usersModel.updateOne({ _id: req.params.userId }, { $set : { isVerify: true, verificationDate: new Date() } });
+      const userName = usersModel.findOne({ _id: req.params.userId }, { firstName:1,lastName:1 }).lean();
+
+      res.render("email/email-verification", { title: "email verification", layout:"auth", userName: userName, usrAlreadyVerify:false })
+    } catch (error) {
+      res.render("error", { message: error })
+    }
+});
+
+/* email verification resend link */
+router.post("/:userId/email-verification/resend-link", async (req,res,next) => {
+  try {
+    const userDetail = await usersModel.findOne({ _id: req.params.userId});
+    
+    // when verification attempt more then 5 times
+    if(userDetail.totalVerifyLinkSend >= Number(process.env.LINK_LIMIT)){
+      console.log("Your Verification Attempts are Over");
+      return res.send({
+        type:"error",
+        message:"Your Verification Attempts are Over"
+      })
+    }
+
+    // when once sended link & before 15 minute click next time on verification btn send warning
+    const nowDate = new Date().getTime();
+    const lastLinkSendTime = new Date(userDetail.lastVerifyLinkSend).getTime();
+    const timeDifference = (nowDate - lastLinkSendTime) / 1000 / 60;
+
+    if(timeDifference < Number(process.env.LINK_RESEND_TIME)){
+      const remainingTime = (Number(process.env.LINK_RESEND_TIME) - timeDifference).toFixed(2);
+      console.log("remainingTime",remainingTime);
+      return res.send({
+        type:"warning",
+        message:`Please, try again after ${remainingTime} minutes`
+      })
+    }
+
+
+    // send verification link on user email
+    const mailOptions = {
+      userEmail: userDetail.email,
+      subject: "My-Circle | Email Verification",
+      html: `<p>Hello <b>${userDetail.firstName} ${userDetail.lastName},</b><br>
+      Verify your email</p><a href="http://localhost:3000/users/${userDetail._id}/email-verification" >Verify email</a>`,
+    };
+    nodeMailer.sendMail(mailOptions);
+
+    // increase count of verification link & update last link send time
+    const increaseTotal = userDetail.totalVerifyLinkSend + 1;
+    await usersModel.updateOne({ _id: req.params.userId }, { $set: { totalVerifyLinkSend : increaseTotal, lastVerifyLinkSend: new Date() } });
+
+    res.send({
+      type: "success",
+      message: "Verification Link sended on Your Email"
+    })
+
+  } catch (error) {
+    res.render("error", { message: error })
+  }
+});
 module.exports = router;

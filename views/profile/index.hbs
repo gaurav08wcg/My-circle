@@ -6,7 +6,6 @@
                 <div class="col">
                     <h2 class="page-title">
                         User profile
-                        
                         {{!-- update message  --}}
                         {{!-- {{messages}} --}}
                         
@@ -72,18 +71,6 @@
                                 </svg>
                                 {{/compare}}
 
-                                {{!-- <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-man"
-                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M10 16v5"></path>
-                                    <path d="M14 16v5"></path>
-                                    <path d="M9 9h6l-1 7h-4z"></path>
-                                    <path d="M5 11c1.333 -1.333 2.667 -2 4 -2"></path>
-                                    <path d="M19 11c-1.333 -1.333 -2.667 -2 -4 -2"></path>
-                                    <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                </svg> --}}
-
                                 {{user.gender}}
                             </div>
 
@@ -100,6 +87,24 @@
                                 </svg>
                                 <a href="#" class="text-reset">{{user.email}}</a>
                             </div>
+
+                            {{!-- ======== mail verification ======== --}}
+                            {{#if user.isVerify}}
+                            <div class="list-inline-item">
+                                <a href="javascript:void(0)" class="badge bg-success-lt">Verified</a>
+                            </div>
+                            {{else}}
+                            {{!-- verification link --}}
+                            <div class="list-inline-item" id="email-verification-btn">
+                                <a href="javascript:void(0)" class="badge bg-warning-lt">Verify email</a>
+                            </div>
+
+                            {{!-- Remaining verification attempts --}}
+                            <div class="list-inline-item" id="remaining-attempt-total">
+                                <p> Remaining attempts: <b> {{remainingVerifyAttempts}} </b></p>
+                            </div>
+                            {{/if}}
+
                         </div>
                     </div>
 

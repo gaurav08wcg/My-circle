@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+require("dotenv").config();
 
 const fs = require("fs");
 const path = require("path");
@@ -37,25 +38,23 @@ router.get("/", async (req, res, next) => {
         "lastName" : 1,
         "gender" : 1,
         "email" : 1,
+        "isVerify":1,
+        "verificationDate":1,
+        "totalVerifyLinkSend":1,
         "profilePicture": 1
       }
     ).lean();
+    console.log("userDetails =>", userDetails);
 
-    res.render("profile/index", { title: "profile", user : userDetails  });
+    // remaining verification attempts (max 5 attempt)
+    console.log("limit", Number(process.env.LINK_LIMIT));
+    const remainingVerifyAttempts = Number(process.env.LINK_LIMIT) - userDetails.totalVerifyLinkSend; 
+
+    res.render("profile/index", { title: "profile", user : userDetails,  remainingVerifyAttempts: remainingVerifyAttempts });
   } catch (error) {
     res.render("error", { message: error });
   }
 });
-
-// not working
-// router.put("/", async (req,res,next) =>{
-//     try {
-
-//         return console.log("put data =>",  req.body);
-//     } catch (error) {
-//         res.render("error", { message:error })
-//     }
-// });
 
 /* update profile */
 router.post("/", upload.single("profilePicture"), async (req, res, next) => {
