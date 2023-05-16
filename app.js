@@ -22,6 +22,7 @@ const usersRouter = require("./routes/users");
 const reportRouter = require("./routes/report");
 const archivedPostRouter = require("./routes/archived-post");
 const notificationRouter = require("./routes/notification");
+const chatsRouter = require("./routes/chats");
 
 const app = express();
 
@@ -80,7 +81,7 @@ app.use(commonFun.setLocals);
 app.use("/", indexRouter);
 
 // set authentication middleware
-app.use(commonFun.checkAuth)
+app.use(commonFun.checkAuth);
 
 app.use("/profile", profileRouter);
 app.use("/post", postRouter);
@@ -89,6 +90,7 @@ app.use("/archived-post", archivedPostRouter);
 app.use("/users", usersRouter);
 app.use("/report", reportRouter);
 app.use("/notification", notificationRouter);
+app.use("/chats", chatsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
