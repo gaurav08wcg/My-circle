@@ -352,7 +352,33 @@ router.get("/export-csv", async (req, res, next) => {
     console.log("usersDetails =>",userDetail);
       
     // convert DB data => CSV
-    const fields = ["firstName","lastName","gender","email","totalSavedPost","totalCreatedPost"];
+    // const fields = ["firstName","lastName","gender","email","totalSavedPost","totalCreatedPost"];
+    const fields = [
+      {
+        label:"First Name",   // custom field
+        value:"firstName"     // db's field
+      },
+      {
+        label:"Last Name",
+        value:"lastName"
+      },
+      {
+        label:"Gender",
+        value:"gender"
+      },
+      {
+        label:"Email",
+        value:"email"
+      },
+      {
+        label:"Total Saved Post",
+        value:"totalSavedPost"
+      },
+      {
+        label:"Total Added Post",
+        value:"totalCreatedPost"
+      }
+    ]
     const parser = new Parser({ fields });
     const csv = parser.parse(userDetail);
     console.log("csv =>",csv);
