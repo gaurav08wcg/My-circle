@@ -5,6 +5,7 @@ const listUsersEvent = function (){
         _this.searchUser();
         _this.pagination();
         _this.resetButton();
+        _this.exportCsvBtn();
     }
 
     //  Query String -> Object cunverter function
@@ -82,7 +83,7 @@ const listUsersEvent = function (){
         })
     }
 
-        // reset all filter & search btn 
+    // reset all filter & search btn 
     this.resetButton = function (){
     
         $(document).on("click", "#reset-btn", function(){
@@ -96,6 +97,35 @@ const listUsersEvent = function (){
         })
     }
     
+    // Export CSV btn event
+    this.exportCsvBtn = function(){
+        $(document).on("click", "#export-user-csv-btn", function(){
+            const queryObject = queryToObj(window.location.search);
+            let url = `/users/export-csv`;
+
+            // when search & sort user
+            if(queryObject){
+                if(queryObject.search) url = `/users/export-csv?search=${queryObject?.search}`;
+                if(queryObject.sortOrder) url = `/users/export-csv?sortOrder=${queryObject?.sortOrder}`
+                if(queryObject.sortOrder && queryObject.search) url = `/users/export-csv?sortOrder=${queryObject?.sortOrder}&search=${queryObject?.search}`
+            }
+
+            // call export csv route
+            $.ajax({
+                method:"get",
+                url: url,
+                success: function(data) {
+                    // download csv file
+                    var blob=new Blob([data]);
+                    var link=document.createElement('a');
+                    link.href=window.URL.createObjectURL(blob);
+                    link.download="My-Circle-Users.csv";
+                    link.click();
+                }
+            });
+        });
+    }
+
     const _this = this;
     _this.init();
 }
