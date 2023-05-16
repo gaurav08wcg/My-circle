@@ -1,0 +1,160 @@
+<div class="col-md-7">
+    <div class="card">
+        {{!-- header --}}
+        <div class="card-header">
+            <div>
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        {{!-- user avatar --}}
+                        <span class="avatar" style="background-image: url(./static/avatars/003m.jpg)"></span>
+                    </div>
+                    <div class="col">
+                        {{!-- user name --}}
+                        <div class="card-title">Dunn Slane</div>
+                        <div class="card-subtitle">Research Nurse</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-actions">
+                <div class="dropdown">
+                    <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"><!-- Download SVG icon from http://tabler-icons.io/i/dots-vertical -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                            <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                            <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                        </svg>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" style="">
+                        <a class="dropdown-item" href="#">Edit user</a>
+                        <a class="dropdown-item" href="#">Change permissions</a>
+                        <a class="dropdown-item text-danger" href="#">Delete user</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- body --}}
+        <div class="card-body p-0" id="view-chat-body" style="height: 40rem;">
+
+            {{!-- chats list --}}
+            <div class="list-group  overflow-auto" id="chat-msg-list" style="height: 35rem;" >
+                
+                {{!-- chat message box (opposite user)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-start">
+                    <div class="card card-borderless bg-primary-lt">
+                        <div class="card-body">
+                            <div>Card without border</div>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- chat message box (mine)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-end">
+                    <div class="card card-borderless bg-success-lt">
+                        <div class="card-body">
+                            <div>Card without border </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- chat message box (opposite user)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-start">
+                    <div class="card card-borderless bg-primary-lt">
+                        <div class="card-body">
+                            <div>Card without border</div>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- chat message box (mine)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-end">
+                    <div class="card card-borderless bg-success-lt">
+                        <div class="card-body">
+                            <div>Card without border </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- chat message box (opposite user)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-start">
+                    <div class="card card-borderless bg-primary-lt">
+                        <div class="card-body">
+                            <div>Card without border</div>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- chat message box (mine)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-end">
+                    <div class="card card-borderless bg-success-lt">
+                        <div class="card-body">
+                            <div>Card without border </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {{!-- chat message box (opposite user)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-start">
+                    <div class="card card-borderless bg-primary-lt">
+                        <div class="card-body">
+                            <div>Card without border</div>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- chat message box (mine)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-end">
+                    <div class="card card-borderless bg-success-lt">
+                        <div class="card-body">
+                            <div>Card without border </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- chat message box (opposite user)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-start">
+                    <div class="card card-borderless bg-primary-lt">
+                        <div class="card-body">
+                            <div>Card without border</div>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- chat message box (mine)--}}
+                <div class="col-md-3 col-lg-6 p-2 align-self-end">
+                    <div class="card card-borderless bg-success-lt">
+                        <div class="card-body">
+                            <div>Card without border </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            {{!-- message writing section --}}
+            <div class="row g-2 pt-4 justify-content-around">
+                
+                {{!-- input box --}}
+                <div class="input-icon col-8">
+                    <span class="input-icon-addon">
+                        <i class="ti ti-send"></i>
+                    </span>
+                    <input id="search-post" name="searchPost" type="text" class="form-control" placeholder="Write a message…" aria-label="Search in website">
+                </div>
+
+                {{!-- msg send btn --}}
+                <div class="col-2">
+                    <a id="msg-send-btn" class="btn btn-primary w-100">
+                        Send
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

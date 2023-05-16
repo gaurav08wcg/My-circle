@@ -1,0 +1,45 @@
+<div class="col-4">
+    <div class="card" style="height: 45rem">
+
+        {{!-- heading --}}
+        <div class="card-header">
+            <h3 class="card-title">Conversations</h3>
+        </div>
+
+        {{!-- lists --}}
+        <div class="list-group list-group-flush overflow-auto" style="max-height: 35rem">
+
+            {{!--============ user's single row ==========--}}
+            {{#if usersChat}}
+            {{#each usersChat}}        
+            <div class="list-group-item" id="chat-btn">
+                <div class="row">
+                    <div class="col-auto">
+                        <a href="javascript:void(0)">
+                            {{!-- user avatar --}}
+                            {{#if profilePicture}}
+                                <img class="avatar" src="/uploads/profilePicture/{{profilePicture}}" />
+                            {{else}}
+                                <img class="avatar" src="/images/avatar.png" />
+                            {{/if}}
+                        </a>
+                    </div>
+                    <div class="col text-truncate">
+                        {{!-- user name --}}
+                        <a href="javascript:void(0)" class="text-body d-block">{{firstName}} {{lastName}}</a>
+                        
+                        {{!-- last msg text --}}
+                        <div class="text-muted text-truncate mt-n1">
+                            Change deprecated html tags to text
+                            decoration classes (#29604)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+            {{/if}}
+
+        </div>
+
+    </div>
+</div>
