@@ -19,6 +19,7 @@
     "handlebars-helpers": "^0.10.0",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
+    "json2csv": "^6.0.0-alpha.2",
     "md5": "^2.3.0",
     "moment": "^2.29.4",
     "mongoose": "^7.0.3",
