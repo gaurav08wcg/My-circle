@@ -1,4 +1,3 @@
-<div class="col-md-7">
     <div class="card">
         {{!-- header --}}
         <div class="card-header">
@@ -6,12 +5,16 @@
                 <div class="row align-items-center">
                     <div class="col-auto">
                         {{!-- user avatar --}}
-                        <span class="avatar" style="background-image: url(./static/avatars/003m.jpg)"></span>
+                            {{#if userInfo.profilePicture}}
+                                <img class="avatar" src="/uploads/profilePicture/{{userInfo.profilePicture}}" />
+                            {{else}}
+                                <img class="avatar" src="/images/avatar.png" />
+                            {{/if}} 
                     </div>
                     <div class="col">
                         {{!-- user name --}}
-                        <div class="card-title">Dunn Slane</div>
-                        <div class="card-subtitle">Research Nurse</div>
+                        <div class="card-title">{{userInfo.firstName}} {{userInfo.lastName}}</div>
+                        {{!-- <div class="card-subtitle">Research Nurse</div> --}}
                     </div>
                 </div>
             </div>
@@ -42,119 +45,44 @@
 
             {{!-- chats list --}}
             <div class="list-group  overflow-auto" id="chat-msg-list" style="height: 35rem;" >
-                
-                {{!-- chat message box (opposite user)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-start">
-                    <div class="card card-borderless bg-primary-lt">
-                        <div class="card-body">
-                            <div>Card without border</div>
+                                
+                {{#if listOfChats}}
+                    {{#each listOfChats}}
+
+                    {{!-- chat message box --}}
+                    <div class="col-md-auto col-lg-auto p-2 {{#if (compare sendBy "==" ../user._id)}}align-self-end{{else}}align-self-start{{/if}}">
+                        <div class="card card-borderless {{#if (compare sendBy "==" ../user._id)}}bg-success-lt{{else}}bg-primary-lt{{/if}} ">
+                            <div class="card-body">
+                                <div>{{chatMessage}}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {{!-- chat message box (mine)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-end">
-                    <div class="card card-borderless bg-success-lt">
-                        <div class="card-body">
-                            <div>Card without border </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{!-- chat message box (opposite user)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-start">
-                    <div class="card card-borderless bg-primary-lt">
-                        <div class="card-body">
-                            <div>Card without border</div>
-                        </div>
-                    </div>
-                </div>
-
-                {{!-- chat message box (mine)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-end">
-                    <div class="card card-borderless bg-success-lt">
-                        <div class="card-body">
-                            <div>Card without border </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{!-- chat message box (opposite user)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-start">
-                    <div class="card card-borderless bg-primary-lt">
-                        <div class="card-body">
-                            <div>Card without border</div>
-                        </div>
-                    </div>
-                </div>
-
-                {{!-- chat message box (mine)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-end">
-                    <div class="card card-borderless bg-success-lt">
-                        <div class="card-body">
-                            <div>Card without border </div>
-                        </div>
-                    </div>
-                </div>
-                
-                {{!-- chat message box (opposite user)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-start">
-                    <div class="card card-borderless bg-primary-lt">
-                        <div class="card-body">
-                            <div>Card without border</div>
-                        </div>
-                    </div>
-                </div>
-
-                {{!-- chat message box (mine)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-end">
-                    <div class="card card-borderless bg-success-lt">
-                        <div class="card-body">
-                            <div>Card without border </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{!-- chat message box (opposite user)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-start">
-                    <div class="card card-borderless bg-primary-lt">
-                        <div class="card-body">
-                            <div>Card without border</div>
-                        </div>
-                    </div>
-                </div>
-
-                {{!-- chat message box (mine)--}}
-                <div class="col-md-3 col-lg-6 p-2 align-self-end">
-                    <div class="card card-borderless bg-success-lt">
-                        <div class="card-body">
-                            <div>Card without border </div>
-                        </div>
-                    </div>
-                </div>
-
-
+                    {{/each}}
+                {{else}}
+                    <h1 class="text-center">Start conversations</h1>
+                {{/if}}
             </div>
 
             {{!-- message writing section --}}
-            <div class="row g-2 pt-4 justify-content-around">
-                
-                {{!-- input box --}}
-                <div class="input-icon col-8">
-                    <span class="input-icon-addon">
-                        <i class="ti ti-send"></i>
-                    </span>
-                    <input id="search-post" name="searchPost" type="text" class="form-control" placeholder="Write a message…" aria-label="Search in website">
-                </div>
+            
+                <div class="row g-2 pt-4 justify-content-around">
+                    {{!-- input box --}}
+                    <div class="input-icon col-8">
+                        <span class="input-icon-addon">
+                            <i class="ti ti-send"></i>
+                        </span>
+                        <input id="message-send-field" name="chatMessage" type="text" class="form-control" placeholder="Write a message…" aria-label="Search in website">
+                    </div>
 
-                {{!-- msg send btn --}}
-                <div class="col-2">
-                    <a id="msg-send-btn" class="btn btn-primary w-100">
-                        Send
-                    </a>
+                    {{!-- msg send btn --}}
+                    <div class="col-2">
+                        <button type="button" id="msg-send-btn" class="btn btn-primary w-100" data-opposite-user-id="{{userInfo._id}}">
+                            Send
+                        </button>
+                    </div>
                 </div>
-            </div>
+            
 
         </div>
     </div>
-</div>

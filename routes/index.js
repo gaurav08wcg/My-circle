@@ -7,7 +7,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 const auth = require("../auth");
 const nodeMailer = require("../email-sender");   // node mailer
-const serverSocket = require("../server-socket");
+// const serverSocket = require("../server-socket");
 
 /* models */
 const { usersModel } = require("../model/users");
@@ -48,7 +48,7 @@ router.get("/", async function (req, res, next) {
   try {
 
     // create new room name of userId and store their sockets
-    serverSocket.createRoom();
+    // serverSocket.createRoom();
 
     // query data
     const filter = req.query.filter;

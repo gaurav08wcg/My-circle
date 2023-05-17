@@ -1,4 +1,4 @@
-<div class="page-wrapper">
+<div class="page-wrapper" id="chat-page">
     <!-- Page header -->
     <div class="page-header d-print-none">
         <div class="container-xl">
@@ -12,7 +12,7 @@
         </div>
     </div>
     <!-- Page body -->
-    <div class="page-body">
+    <div class="page-body" id="chat-page-body">
         <div class="container-xl">
             <!-- Content here -->
             <div class="col-md-12">
@@ -22,11 +22,16 @@
                     {{>chat/chat-list}}
                     
                     {{!-- view conversation --}}
-                    {{>chat/view-chat}}
+                    {{#if userInfo}}
+                        <div class="col-md-7" id="view-conversation">
+                        {{>chat/view-chat}}
+                        </div>
+                    {{else}}
+                        <div class="col-7" id="view-conversation">
+                            <h1 class="text-center">Conversations</h1>
+                        </div>
+                    {{/if}}
                     
-                    {{!-- <div class="col-7" id="view-conversation">
-                        <h1 class="text-center">Conversations</h1>
-                    </div> --}}
                 </div>
             </div>
             
@@ -36,7 +41,7 @@
 
 {{!-- event file --}}
 {{#section "script"}}
-<script src="./javascripts/chats.js"></script>
+<script src="/javascripts/chats.js"></script>
 <script>
     $(document).ready(function () {
 

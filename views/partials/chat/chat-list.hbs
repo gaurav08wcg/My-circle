@@ -12,7 +12,7 @@
             {{!--============ user's single row ==========--}}
             {{#if usersChat}}
             {{#each usersChat}}        
-            <div class="list-group-item" id="chat-btn">
+            <div class="list-group-item" id="chat-btn"  style="cursor: pointer;" data-chat-user-id="{{_id}}">
                 <div class="row">
                     <div class="col-auto">
                         <a href="javascript:void(0)">
@@ -29,10 +29,10 @@
                         <a href="javascript:void(0)" class="text-body d-block">{{firstName}} {{lastName}}</a>
                         
                         {{!-- last msg text --}}
-                        <div class="text-muted text-truncate mt-n1">
+                        {{!-- <div class="text-muted text-truncate mt-n1">
                             Change deprecated html tags to text
                             decoration classes (#29604)
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

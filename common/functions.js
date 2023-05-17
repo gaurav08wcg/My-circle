@@ -1,7 +1,10 @@
+const serverSocket = require("../server-socket");
 module.exports = {
   setLocals: function (req, res, next) {
     if (req.user) {
       res.locals.user = req.user;
+      // create new room name of userId and store their sockets
+      serverSocket.createRoom();
     }
     next();
   },
@@ -18,7 +21,7 @@ module.exports = {
         return res.redirect("/signin");
       }
       console.log("-------- User authenticate ----------");
-      console.log("auth user =>", req.user);
+      // console.log("auth user =>", req.user);
       return next();
     } catch (error) {
       console.log("error =>", error);
