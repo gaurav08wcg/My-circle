@@ -1,88 +1,93 @@
-    <div class="card">
-        {{!-- header --}}
-        <div class="card-header">
-            <div>
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        {{!-- user avatar --}}
-                            {{#if userInfo.profilePicture}}
-                                <img class="avatar" src="/uploads/profilePicture/{{userInfo.profilePicture}}" />
-                            {{else}}
-                                <img class="avatar" src="/images/avatar.png" />
-                            {{/if}} 
-                    </div>
-                    <div class="col">
-                        {{!-- user name --}}
-                        <div class="card-title">{{userInfo.firstName}} {{userInfo.lastName}}</div>
-                        {{!-- <div class="card-subtitle">Research Nurse</div> --}}
-                    </div>
+<div class="card">
+    {{!-- header --}}
+    <div class="card-header">
+        <div>
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    {{!-- user avatar --}}
+                    {{#if userInfo.profilePicture}}
+                    <img class="avatar" src="/uploads/profilePicture/{{userInfo.profilePicture}}" />
+                    {{else}}
+                    <img class="avatar" src="/images/avatar.png" />
+                    {{/if}}
                 </div>
-            </div>
-            <div class="card-actions">
-                <div class="dropdown">
-                    <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false"><!-- Download SVG icon from http://tabler-icons.io/i/dots-vertical -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                            <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                            <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                        </svg>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end" style="">
-                        <a class="dropdown-item" href="#">Edit user</a>
-                        <a class="dropdown-item" href="#">Change permissions</a>
-                        <a class="dropdown-item text-danger" href="#">Delete user</a>
-                    </div>
+                <div class="col">
+                    {{!-- user name --}}
+                    <div class="card-title">{{userInfo.firstName}} {{userInfo.lastName}}</div>
+                    {{!-- <div class="card-subtitle">Research Nurse</div> --}}
                 </div>
             </div>
         </div>
-
-        {{!-- body --}}
-        <div class="card-body p-0" id="view-chat-body" style="height: 40rem;">
-
-            {{!-- chats list --}}
-            <div class="list-group  overflow-auto" id="chat-msg-list" style="height: 35rem;" >
-                                
-                {{#if listOfChats}}
-                    {{#each listOfChats}}
-
-                    {{!-- chat message box --}}
-                    <div class="col-md-auto col-lg-auto p-2 {{#if (compare sendBy "==" ../user._id)}}align-self-end{{else}}align-self-start{{/if}}">
-                        <div class="card card-borderless {{#if (compare sendBy "==" ../user._id)}}bg-success-lt{{else}}bg-primary-lt{{/if}} ">
-                            <div class="card-body">
-                                <div>{{chatMessage}}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{/each}}
-                {{else}}
-                    <h1 class="text-center">Start conversations</h1>
-                {{/if}}
-            </div>
-
-            {{!-- message writing section --}}
-            
-                <div class="row g-2 pt-4 justify-content-around">
-                    {{!-- input box --}}
-                    <div class="input-icon col-8">
-                        <span class="input-icon-addon">
-                            <i class="ti ti-send"></i>
-                        </span>
-                        <input id="message-send-field" name="chatMessage" type="text" class="form-control" placeholder="Write a message…" aria-label="Search in website">
-                    </div>
-
-                    {{!-- msg send btn --}}
-                    <div class="col-2">
-                        <button type="button" id="msg-send-btn" class="btn btn-primary w-100" data-opposite-user-id="{{userInfo._id}}">
-                            Send
-                        </button>
-                    </div>
+        <div class="card-actions">
+            <div class="dropdown">
+                <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"><!-- Download SVG icon from http://tabler-icons.io/i/dots-vertical -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                    </svg>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end" style="">
+                    <a class="dropdown-item" href="#">Edit user</a>
+                    <a class="dropdown-item" href="#">Change permissions</a>
+                    <a class="dropdown-item text-danger" href="#">Delete user</a>
                 </div>
-            
-
+            </div>
         </div>
     </div>
+
+    {{!-- body --}}
+    <div class="card-body p-0" id="view-chat-body" style="height: 40rem;">
+
+        {{!-- chats list --}}
+        <div class="list-group  overflow-auto" id="chat-msg-list" style="height: 35rem;">
+
+            {{#if listOfChats}}
+            {{#each listOfChats}}
+
+            {{!-- chat message box --}}
+            <div id="single-chat-block"
+                class="col-md-auto col-lg-auto p-2 {{#if (compare sendBy "==" ../user._id)}}align-self-end{{else}}align-self-start{{/if}}">
+                <div
+                    class="card card-borderless {{#if (compare sendBy "==" ../user._id)}}bg-success-lt{{else}}bg-primary-lt{{/if}} ">
+                    <div class="card-body">
+                        <span class="text-muted pb-2">{{moment createdAt}}</span>
+                        <div style="font-size: 1.05rem;" id="text-msg">{{chatMessage}}</div>
+                    </div>
+                </div>
+            </div>
+
+            {{/each}}
+            {{else}}
+            <h1 class="text-center pt-3">Start conversations</h1>
+            {{/if}}
+        </div>
+
+        {{!-- message writing section --}}
+
+        <div class="row g-2 pt-4 justify-content-around">
+            {{!-- input box --}}
+            <div class="input-icon col-8">
+                <span class="input-icon-addon">
+                    <i class="ti ti-send"></i>
+                </span>
+                <input id="message-send-field" name="chatMessage" type="text" class="form-control"
+                    placeholder="Write a message…" aria-label="Search in website">
+            </div>
+
+            {{!-- msg send btn --}}
+            <div class="col-2">
+                <button type="button" id="msg-send-btn" class="btn btn-primary w-100"
+                    data-opposite-user-id="{{userInfo._id}}">
+                    Send
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+</div>

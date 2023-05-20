@@ -4,6 +4,7 @@ module.exports = {
     if (req.user) {
       res.locals.user = req.user;
       // create new room name of userId and store their sockets
+      console.log("======== Create use's room =========");
       serverSocket.createRoom();
     }
     next();
